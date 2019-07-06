@@ -17,13 +17,13 @@ before_script:
   - source venv/bin/activate
   - pip install .[dev]
 
-# tests:
-#   stage: test
-#   coverage: '/TOTAL[\s\d]+\s(\d+%)/'
-#   script:
-#     - coverage run setup.py test
-#     - coverage report
-#     - codecov
+tests:
+  stage: test
+  coverage: '/TOTAL[\s\d]+\s(\d+%)/'
+  script:
+    - coverage run setup.py test
+    - coverage report
+    - codecov
 
 flake8:
   stage: test

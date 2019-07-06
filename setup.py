@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 from setuptools import setup, find_packages
+from typing import List
 
 
-def read_requirements(filename):
+def read_requirements(filename: str) -> List[str]:
     return [req.strip() for req in open(filename)]
 
+
+# requirements = read_requirements('requirements.txt')
+requirements = None
+dev_requirements = read_requirements('requirements-dev.txt')
 
 setup(
     name='pylspci',
@@ -17,10 +22,12 @@ setup(
         '': ['*.md', 'LICENSE', 'README'],
     },
     python_requires='>=3.5',
-    install_requires=read_requirements('requirements.txt'),
+    install_requires=None,
     extras_require={
-        'dev': read_requirements('requirements-dev.txt'),
+        'dev': dev_requirements,
     },
+    tests_require=dev_requirements,
+    test_suite='pylspci.tests',
     license='GNU General Public License 3',
     description="Simple parser for lspci -mmnn.",
     long_description=open('README.rst').read(),
