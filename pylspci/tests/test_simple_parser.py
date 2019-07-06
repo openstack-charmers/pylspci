@@ -74,7 +74,7 @@ class TestSimpleFormatParser(TestCase):
         self.assertIsNone(dev.revision)
         self.assertIsNone(dev.progif)
 
-    @patch('pylspci.simple_parser.subprocess.check_output')
+    @patch('pylspci.simple_parser.lspci')
     def test_command(self, cmd_mock: MagicMock) -> None:
         cmd_mock.return_value = \
             '00:1c.3 "PCI bridge [0604]" "Intel Corporation [8086]" ' \
@@ -87,7 +87,4 @@ class TestSimpleFormatParser(TestCase):
         self._check_device(devices[1])
 
         self.assertEqual(cmd_mock.call_count, 1)
-        self.assertEqual(cmd_mock.call_args, call(
-            ['lspci', '-nnmm'],
-            universal_newlines=True,
-        ))
+        self.assertEqual(cmd_mock.call_args, call())
