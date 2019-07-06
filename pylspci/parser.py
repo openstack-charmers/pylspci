@@ -1,4 +1,5 @@
 from pylspci.fields import hexstring, Slot, NameWithID
+from pylspci.device import Device
 import argparse
 import shlex
 import subprocess
@@ -19,7 +20,7 @@ class SimpleFormatParser(object):
             type=Slot,
         )
         self._parser.add_argument(
-            'class',
+            'cls',
             type=NameWithID,
         )
         self._parser.add_argument(
@@ -55,7 +56,7 @@ class SimpleFormatParser(object):
     def parse(self, args):
         if isinstance(args, str):
             args = shlex.split(args)
-        return vars(self.parser.parse_args(args))
+        return Device(**vars(self.parser.parse_args(args)))
 
     def from_lspci(self):
         return list(map(

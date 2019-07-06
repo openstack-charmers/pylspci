@@ -5,7 +5,7 @@ import json
 
 if __name__ == '__main__':
     print(json.dumps(
-        lspci(),
+        list(map(lambda d: d._asdict(), lspci())),
         indent=4,
         default=vars,
     ))
