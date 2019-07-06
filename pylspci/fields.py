@@ -1,4 +1,5 @@
 from functools import partial
+from typing import Optional
 import re
 
 
@@ -33,12 +34,12 @@ class NameWithID(object):
     """
     Describes a name with an hexadecimal ID.
     """
-    id: int
-    name: str
+    id: Optional[int]
+    name: Optional[str]
 
     _NAME_ID_REGEX = re.compile(r'^(?P<name>.+)\s\[(?P<id>[0-9a-fA-F]{4})\]$')
 
-    def __init__(self, value: str) -> None:
+    def __init__(self, value: Optional[str]) -> None:
         if value.endswith(']'):
             # Holds both an ID and a name
             gd = self._NAME_ID_REGEX.match(value).groupdict()
