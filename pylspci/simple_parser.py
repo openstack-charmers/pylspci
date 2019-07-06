@@ -1,10 +1,10 @@
 from typing import Union, List
 from cached_property import cached_property
+from pylspci.command import lspci
 from pylspci.fields import hexstring, Slot, NameWithID
 from pylspci.device import Device
 import argparse
 import shlex
-import subprocess
 
 
 class SimpleFormatParser(object):
@@ -58,8 +58,5 @@ class SimpleFormatParser(object):
     def from_lspci(self) -> List[Device]:
         return list(map(
             self.parse,
-            subprocess.check_output(
-                ['lspci', '-nnmm'],
-                universal_newlines=True,
-            ).splitlines(),
+            lspci().splitlines(),
         ))
