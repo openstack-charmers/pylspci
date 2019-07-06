@@ -40,7 +40,7 @@ class NameWithID(object):
     _NAME_ID_REGEX = re.compile(r'^(?P<name>.+)\s\[(?P<id>[0-9a-fA-F]{4})\]$')
 
     def __init__(self, value: Optional[str]) -> None:
-        if value.endswith(']'):
+        if value and value.endswith(']'):
             # Holds both an ID and a name
             gd = self._NAME_ID_REGEX.match(value).groupdict()
             self.id = hexstring(gd['id'])
@@ -50,17 +50,17 @@ class NameWithID(object):
         try:
             self.id = hexstring(value)
             self.name = None
-        except ValueError:
+        except (TypeError, ValueError):
             self.id = None
             self.name = value
 
     def __str__(self) -> str:
         if self.id and self.name:
-            return '{} [{:x}]'.format(self.name, self.id)
+            return '{} [{:04x}]'.format(self.name, self.id)
         elif self.name:
             return self.name
         elif self.id:
-            return '{:x}'.format(self.id)
+            return '{:04x}'.format(self.id)
         else:
             return ''
 
