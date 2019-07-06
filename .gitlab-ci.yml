@@ -30,6 +30,11 @@ flake8:
   script:
     - flake8
 
+doc8:
+  stage: test
+  script:
+    - doc8
+
 deploy-pypi:
   stage: deploy
   when: manual
