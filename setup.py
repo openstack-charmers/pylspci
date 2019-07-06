@@ -7,8 +7,7 @@ def read_requirements(filename: str) -> List[str]:
     return [req.strip() for req in open(filename)]
 
 
-# requirements = read_requirements('requirements.txt')
-requirements = None
+requirements = read_requirements('requirements.txt')
 dev_requirements = read_requirements('requirements-dev.txt')
 
 setup(
@@ -22,7 +21,7 @@ setup(
         '': ['*.md', 'LICENSE', 'README'],
     },
     python_requires='>=3.5',
-    install_requires=None,
+    install_requires=requirements,
     extras_require={
         'dev': dev_requirements,
     },
