@@ -1,3 +1,4 @@
+from typing import Union, List
 from pylspci.fields import hexstring, Slot, NameWithID
 from pylspci.device import Device
 import argparse
@@ -7,10 +8,10 @@ import subprocess
 
 class SimpleFormatParser(object):
 
-    _parser = None
+    _parser: argparse.ArgumentParser = None
 
     @property
-    def parser(self):
+    def parser(self) -> argparse.ArgumentParser:
         if self._parser is not None:
             return self._parser
 
@@ -53,12 +54,12 @@ class SimpleFormatParser(object):
         )
         return self._parser
 
-    def parse(self, args):
+    def parse(self, args: Union[str, List[str]]) -> Device:
         if isinstance(args, str):
             args = shlex.split(args)
         return Device(**vars(self.parser.parse_args(args)))
 
-    def from_lspci(self):
+    def from_lspci(self) -> List[Device]:
         return list(map(
             self.parse,
             subprocess.check_output(
