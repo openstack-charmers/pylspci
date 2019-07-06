@@ -30,17 +30,18 @@ class NameWithID(object):
     Describes a name with an hexadecimal ID.
     """
 
-    _NAME_ID_REGEX = re.compile(r'^(?P<name>.+)\s\[(?P<id>[0-9a-fA-F]+)\]$')
+    _NAME_ID_REGEX = re.compile(r'^(?P<name>.+)\s\[(?P<id>[0-9a-fA-F]{4})\]$')
 
     def __init__(self, value):
         if value.endswith(']'):
             # Holds both an ID and a name
             gd = self._NAME_ID_REGEX.match(value).groupdict()
-            self.id = gd['id']
+            self.id = hexstring(gd['id'])
             self.name = gd['name']
+            return
 
         try:
-            self.id = int(value, base=16)
+            self.id = hexstring(value)
             self.name = None
         except ValueError:
             self.id = None
