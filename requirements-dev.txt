@@ -1,0 +1,4 @@
+flake8>=3.5
+Sphinx>=1.8.1
+coverage>=4.5
+codecov>=2.0
