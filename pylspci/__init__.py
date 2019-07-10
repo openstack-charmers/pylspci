@@ -1,4 +1,3 @@
-from pylspci.simple_parser import SimpleFormatParser
+from pylspci.parsers.simple import SimpleParser
 
-parser = SimpleFormatParser()
-lspci = parser.from_lspci
+parser = SimpleParser()
