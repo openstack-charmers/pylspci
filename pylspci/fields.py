@@ -8,12 +8,40 @@ hexstring = partial(int, base=16)
 
 class Slot(object):
     """
-    Describes a PCI slot identifier.
+    Describes a PCI slot identifier, in the format ``[DDDD:]BB:dd.f``,
+    where ``D`` is the domain, ``B`` the bus, ``d`` the device
+    and ``f`` the function. The first three are hexadecimal numbers, but
+    ``f`` is in octal.
     """
-    domain: int
+
+    domain: int = 0x0000
+    """
+    The slot's domain, as a four-digit hexadecimal number.
+    When omitted, defaults to ``0x0000``.
+
+    :type: int
+    """
+
     bus: int
+    """
+    The slot's bus, as a two-digit hexadecimal number.
+
+    :type: int
+    """
+
     device: int
+    """
+    The slot's device, as a two-digit hexadecimal number.
+
+    :type: int
+    """
+
     function: int
+    """
+    The slot's function, as a single octal digit.
+
+    :type: int
+    """
 
     def __init__(self, value: str) -> None:
         data = list(map(hexstring, re.split(r'[:\.]', value)))
@@ -32,10 +60,23 @@ class Slot(object):
 
 class NameWithID(object):
     """
-    Describes a name with an hexadecimal ID.
+    Describes a device, vendor or class with either
+    a name, an hexadecimal PCI ID, or both.
     """
+
     id: Optional[int]
+    """
+    The PCI ID as a four-digit hexadecimal number.
+
+    :type: int or None
+    """
+
     name: Optional[str]
+    """
+    The human-readable name associated with this ID.
+
+    :type: str or None
+    """
 
     _NAME_ID_REGEX = re.compile(r'^(?P<name>.+)\s\[(?P<id>[0-9a-fA-F]{4})\]$')
 

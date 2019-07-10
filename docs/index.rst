@@ -33,3 +33,43 @@ Python lspci parser
 A Python parser for the ``lspci`` command from the pciutils_ package.
 
 .. _pciutils: http://mj.ucw.cz/sw/pciutils/
+
+Basic usage
+-----------
+
+To parse ``lspci -nnmm``, use the
+:class:`SimpleParser <pylspci.parsers.simple.SimpleParser>`.
+To parse ``lspci -nnmmvvvk``, use the
+:class:`VerboseParser <pylspci.parsers.verbose.VerboseParser>`.
+A :class:`SimpleParser <pylspci.parsers.simple.SimpleParser>` instance is
+available directly as ``pylspci.parser``.
+
+.. code:: python
+
+   >>> from pylspci import parser
+   >>> parser.run()
+   [Device(slot=Slot('0000:00:01.c'), name=NameWithID('Name A [2420]'), ...),
+    Device(slot=Slot('0000:00:01.d'), name=NameWithID('Name B [0e54]'), ...)]
+
+Custom arguments
+^^^^^^^^^^^^^^^^
+
+.. code:: python
+
+   >>> from pylspci.command import IDResolveOption
+   >>> from pylspci import parser
+   >>> parser.run(
+   ...     hide_single_domain=False,
+   ...     id_resolve_option=IDResolveOption.NameOnly,
+   ... )
+   [Device(slot=Slot('0000:00:01.c'), name=NameWithID('Name A'), ...),
+    Device(slot=Slot('0000:00:01.d'), name=NameWithID('Name B'), ...)]
+
+Learn more
+----------
+
+.. toctree::
+   data
+   command
+   low
+   contributing
