@@ -5,14 +5,37 @@ from pylspci.fields import hexstring, Slot, NameWithID
 
 
 class FieldMapping(NamedTuple):
+    """
+    Helper class to map verbose output field names such as ``SVendor`` to
+    :class:`Device` fields such as ``subsytem_vendor``.
+    """
+
     field_name: str
+    """
+    Field name on the :class:`Device` named tuple.
+
+    :type: str
+    """
+
     field_type: Callable[[str], Any]
+    """
+    Field type; a callable to use to parse the string value.
+
+    :type: Callable[[str], Any]
+    """
+
     many: bool = False
+    """
+    Whether or not to use a List, if this field can be repeated multiple times
+    in the lspci output.
+
+    :type: bool
+    """
 
 
 class VerboseParser(Parser):
     """
-    A parser for lspci -vvvmm
+    A parser for lspci -vvvmmk
     """
 
     default_lspci_args = {
@@ -63,6 +86,17 @@ class VerboseParser(Parser):
         return Device(**devdict)
 
     def parse(self, data: Union[str, List[str]]) -> List[Device]:
+        """
+        Parse an lspci -vvvmm[nnk] output, either as a single string holding
+        multiple devices separated by two newlines,
+        or as a list of multiline strings holding one device each.
+
+        :param data: One string holding a full lspci output,
+           or multiple strings holding one device each.
+        :type data: str or List[str]
+        :return: A list of parsed devices.
+        :rtype: List[Device]
+        """
         if isinstance(data, str):
             data = data.split('\n\n')
         return list(map(
