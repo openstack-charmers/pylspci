@@ -2,15 +2,15 @@ from unittest import TestCase
 from unittest.mock import patch, call, MagicMock
 from typing import List
 from pylspci.device import Device
-from pylspci.simple_parser import SimpleFormatParser
+from pylspci.parsers import SimpleParser
 
 
-class TestSimpleFormatParser(TestCase):
+class TestSimpleParser(TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
-        cls.parser = SimpleFormatParser()
+        cls.parser = SimpleParser()
 
     def _check_device(self, dev: Device) -> None:
         self.assertIsInstance(dev, Device)
@@ -32,15 +32,16 @@ class TestSimpleFormatParser(TestCase):
         self.assertEqual(dev.progif, 0x01)
 
     def test_parse_str(self) -> None:
-        dev: Device = self.parser.parse(
+        dev_list: List[Device] = self.parser.parse(
             '00:1c.3 "PCI bridge [0604]" "Intel Corporation [8086]" '
             '"82801 PCI Bridge [244e]" -rd5 -p01 "Intel Corporation [8086]" '
             '"82801 PCI Bridge [244e]"'
         )
-        self._check_device(dev)
+        self.assertEqual(len(dev_list), 1)
+        self._check_device(dev_list[0])
 
     def test_parse_list(self) -> None:
-        dev: Device = self.parser.parse(
+        dev_list: List[Device] = self.parser.parse([
             [
                 '00:1c.3',
                 'PCI bridge [0604]',
@@ -51,11 +52,14 @@ class TestSimpleFormatParser(TestCase):
                 'Intel Corporation [8086]',
                 '82801 PCI Bridge [244e]',
             ]
-        )
-        self._check_device(dev)
+        ])
+        self.assertEqual(len(dev_list), 1)
+        self._check_device(dev_list[0])
 
     def test_parse_nothing(self) -> None:
-        dev: Device = self.parser.parse('00:00.0 "" "" "" "" ""')
+        dev_list: List[Device] = self.parser.parse('00:00.0 "" "" "" "" ""')
+        self.assertEqual(len(dev_list), 1)
+        dev: Device = dev_list[0]
         self.assertIsInstance(dev, Device)
         self.assertEqual(dev.slot.domain, 0x0000)
         self.assertEqual(dev.slot.bus, 0x00)
@@ -74,14 +78,14 @@ class TestSimpleFormatParser(TestCase):
         self.assertIsNone(dev.revision)
         self.assertIsNone(dev.progif)
 
-    @patch('pylspci.simple_parser.lspci')
+    @patch('pylspci.parsers.base.lspci')
     def test_command(self, cmd_mock: MagicMock) -> None:
         cmd_mock.return_value = \
             '00:1c.3 "PCI bridge [0604]" "Intel Corporation [8086]" ' \
             '"82801 PCI Bridge [244e]" -rd5 -p01 "Intel Corporation [8086]" ' \
             '"82801 PCI Bridge [244e]"\n' * 2
 
-        devices: List[Device] = self.parser.from_lspci()
+        devices: List[Device] = self.parser.run()
         self.assertEqual(len(devices), 2)
         self._check_device(devices[0])
         self._check_device(devices[1])
