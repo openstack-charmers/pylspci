@@ -1,6 +1,8 @@
 from unittest import TestCase
 from unittest.mock import patch, call, MagicMock
-from pylspci.command import lspci, IDResolveOption
+from pylspci.fields import PCIAccessParameter
+from pylspci.command import \
+    lspci, list_access_methods, list_pcilib_params, IDResolveOption
 
 
 class TestCommand(TestCase):
@@ -184,3 +186,55 @@ class TestCommand(TestCase):
             universal_newlines=True,
         ))
         self.assertEqual(is_file_mock.call_count, 3)
+
+    @patch('pylspci.command.subprocess.check_output')
+    def test_list_access_methods(self, cmd_mock: MagicMock) -> None:
+        cmd_mock.return_value = """
+        Known PCI access methods:
+
+        linux-sysfs
+        linux-proc
+        intel-conf1
+        intel-conf2
+        dump
+        """
+        self.assertListEqual(
+            list_access_methods(),
+            ['linux-sysfs', 'linux-proc', 'intel-conf1', 'intel-conf2', 'dump']
+        )
+        self.assertEqual(cmd_mock.call_count, 1)
+        self.assertEqual(cmd_mock.call_args, call(
+            ['lspci', '-mm', '-Ahelp', '-nn'],
+            universal_newlines=True,
+        ))
+
+    @patch('pylspci.command.subprocess.check_output')
+    def test_list_pcilib_params(self, cmd_mock: MagicMock) -> None:
+        cmd_mock.return_value = """
+        Known PCI access parameters:
+
+        dump.name        Name of the bus dump file to read from ()
+        proc.path        Path to the procfs bus tree (/proc/bus/pci)
+        sysfs.path       Path to the sysfs device tree (/sys/bus/pci)
+        hwdb.disable     Do not look up names in UDEV's HWDB if non-zero (0)
+        net.cache_name   Name of the ID cache file (~/.pciids-cache)
+        net.domain       DNS domain used for resolving of ID's (pci.id.ucw.cz)
+        """
+        self.assertListEqual(
+            list_pcilib_params(),
+            list(map(PCIAccessParameter, [
+                "dump.name   Name of the bus dump file to read from ()",
+                "proc.path   Path to the procfs bus tree (/proc/bus/pci)",
+                "sysfs.path   Path to the sysfs device tree (/sys/bus/pci)",
+                "hwdb.disable   Do not look up names "
+                "in UDEV's HWDB if non-zero (0)",
+                "net.cache_name   Name of the ID cache file (~/.pciids-cache)",
+                "net.domain    DNS domain used for "
+                "resolving of ID's (pci.id.ucw.cz)",
+            ]))
+        )
+        self.assertEqual(cmd_mock.call_count, 1)
+        self.assertEqual(cmd_mock.call_args, call(
+            ['lspci', '-Ohelp'],
+            universal_newlines=True,
+        ))

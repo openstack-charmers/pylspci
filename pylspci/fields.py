@@ -1,5 +1,5 @@
 from functools import partial
-from typing import Optional
+from typing import Optional, Any
 import re
 
 
@@ -83,7 +83,12 @@ class NameWithID(object):
     def __init__(self, value: Optional[str]) -> None:
         if value and value.endswith(']'):
             # Holds both an ID and a name
-            gd = self._NAME_ID_REGEX.match(value).groupdict()
+            match = self._NAME_ID_REGEX.match(value)
+            if not match:  # Except it doesn't
+                self.id = None
+                self.name = value
+                return
+            gd = match.groupdict()
             self.id = hexstring(gd['id'])
             self.name = gd['name']
             return
@@ -107,3 +112,56 @@ class NameWithID(object):
 
     def __repr__(self) -> str:
         return '{}({!r})'.format(self.__class__.__name__, str(self))
+
+
+class PCIAccessParameter(object):
+    """
+    A pcilib access method parameter, as parsed from :func:`list_pcilib_params`
+    or ``lspci -Ohelp``, that can be modified using the ``pcilib_params``
+    argument of :func:`lspci`, or ``lspci -Oname=value`` in the command line.
+    """
+
+    name: str
+    """
+    The parameter's name.
+
+    :type: str
+    """
+
+    description: str
+    """
+    A short description of the parameter's use.
+
+    :type: str
+    """
+
+    default: Optional[str]
+    """
+    An optional default value for the parameter.
+
+    :type: str or None
+    """
+
+    _PARAM_REGEX = re.compile(
+        r'^(?P<name>\S+)\s+(?P<description>.+)\s\((?P<default>.*)\)$')
+
+    def __init__(self, value: str) -> None:
+        match = self._PARAM_REGEX.match(value)
+        if not match:
+            raise ValueError(
+                'Could not parse {!r} into a parameter'.format(value))
+        gd = match.groupdict()
+        self.name = gd['name'].strip()
+        self.description = gd['description'].strip()
+        self.default = gd['default'].strip() or None
+
+    def __str__(self) -> str:
+        return '{}\t{} ({})'.format(self.name, self.description, self.default)
+
+    def __repr__(self) -> str:
+        return '{!s}({!r})'.format(self.__class__.__name__, str(self))
+
+    def __eq__(self, other: Any) -> bool:
+        return isinstance(other, PCIAccessParameter) and \
+            (self.name, self.description, self.default) \
+            == (other.name, other.description, other.default)

@@ -1,5 +1,5 @@
 from unittest import TestCase
-from pylspci.fields import Slot, NameWithID
+from pylspci.fields import Slot, NameWithID, PCIAccessParameter
 
 
 class TestSlot(TestCase):
@@ -83,3 +83,40 @@ class TestNameWithID(TestCase):
         self.assertIsNone(n.name)
         self.assertEqual(str(n), '')
         self.assertEqual(repr(n), "NameWithID('')")
+
+    def test_bad_format(self) -> None:
+        n = NameWithID('Something [hexa]')
+        self.assertIsNone(n.id)
+        self.assertEqual(n.name, 'Something [hexa]')
+
+
+class TestPCIAccessParameter(TestCase):
+
+    def test_normal(self) -> None:
+        p = PCIAccessParameter('param.name  Some description (default value)')
+        self.assertEqual(p.name, 'param.name')
+        self.assertEqual(p.description, 'Some description')
+        self.assertEqual(p.default, 'default value')
+        self.assertEqual(str(p),
+                         'param.name\tSome description (default value)')
+        self.assertEqual(repr(p),
+                         "PCIAccessParameter('param.name\\tSome description"
+                         " (default value)')")
+
+    def test_no_default(self) -> None:
+        p = PCIAccessParameter('param.name  Some description ()')
+        self.assertEqual(p.name, 'param.name')
+        self.assertEqual(p.description, 'Some description')
+        self.assertIsNone(p.default)
+
+    def test_bad_format(self) -> None:
+        with self.assertRaises(ValueError):
+            PCIAccessParameter('nope')
+        with self.assertRaises(ValueError):
+            PCIAccessParameter('nope (nope)')
+
+    def test_equal(self) -> None:
+        p1 = PCIAccessParameter('param.name  Some description (default value)')
+        p2 = PCIAccessParameter('param.name  Some description ()')
+        self.assertEqual(p1, p1)
+        self.assertNotEqual(p1, p2)

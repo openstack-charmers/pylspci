@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import Optional, Union, List, Mapping, Any
 from pathlib import Path
+from pylspci.fields import PCIAccessParameter
 import subprocess
 
 OptionalPath = Optional[Union[str, Path]]
@@ -49,8 +50,14 @@ def lspci(
        linking Linux kernel modules and their supported PCI IDs.
     :type pcimap: str or Path or None
     :param access_method: The access method to use to find devices.
-       Set this to ``help`` to list the available access methods.
+       Set this to ``help`` to list the available access methods in a
+       human-readable format. For the machine-readable format, see
+       :func:`list_access_methods`.
     :type access_method: str or None
+    :param pcilib_params: Parameters passed to pcilib's access methods.
+       To list the available parameters with their description and default
+       values, see :func:`list_pcilib_params`.
+    :type pcilib_params: Mapping[str, Any] or None
     :param file: An hexadecimal dump from ``lspci -x`` to load data from,
        instead of accessing real hardware.
     :type file: str or Path or None
@@ -108,3 +115,40 @@ def lspci(
         args,
         universal_newlines=True,
     )
+
+
+def list_access_methods():
+    """
+    Calls ``lspci(access_method='help')`` to list the PCI access methods
+    the underlying ``pcilib`` provides and parses the human-readable list into
+    a machine-readable list.
+
+    :returns: A list of access methods.
+    :rtype: List[str]
+    :raises subprocess.CalledProcessError:
+       ``lspci`` returned a non-zero error code.
+    """
+    return list(filter(
+        lambda line: line and 'Known PCI access methods' not in line,
+        map(str.strip, lspci(access_method='help').splitlines()),
+    ))
+
+
+def list_pcilib_params():
+    """
+    Calls ``lspci -Ohelp`` to list the PCI access parameters the underlying
+    ``pcilib`` provides and parse the human-readable list into
+    a machine-readable list.
+
+    :returns: A list of available PCI access parameters.
+    :rtype: List[PCIAccessParameter]
+    :raises subprocess.CalledProcessError:
+       ``lspci`` returned a non-zero error code.
+    """
+    return list(map(PCIAccessParameter, filter(
+        lambda line: line and 'Known PCI access parameters' not in line,
+        map(str.strip, subprocess.check_output(
+            ['lspci', '-Ohelp'],
+            universal_newlines=True,
+        ).splitlines())
+    )))
