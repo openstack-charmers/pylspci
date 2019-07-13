@@ -43,16 +43,30 @@ class Slot(object):
     :type: int
     """
 
+    parent: Optional["Slot"] = None
+    """
+    The slot's parent bridge, if present.
+
+    :type: Slot or None
+    """
+
     def __init__(self, value: str) -> None:
-        data = list(map(hexstring, re.split(r'[:\.]', value)))
+        parent, _, me = value.rpartition('/')
+        if parent:
+            self.parent = Slot(parent)
+
+        data = list(map(hexstring, re.split(r'[:\.]', me)))
         if len(data) == 3:
-            data.insert(0, 0)
+            data.insert(0, self.parent.domain if self.parent else 0)
         self.domain, self.bus, self.device, self.function = data
 
     def __str__(self) -> str:
-        return '{:04x}:{:02x}:{:02x}.{:01x}'.format(
+        output: str = '{:04x}:{:02x}:{:02x}.{:01x}'.format(
             self.domain, self.bus, self.device, self.function,
         )
+        if self.parent:
+            return '{!s}/{}'.format(self.parent, output)
+        return output
 
     def __repr__(self) -> str:
         return '{}({!r})'.format(self.__class__.__name__, str(self))

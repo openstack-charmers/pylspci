@@ -37,6 +37,7 @@ def lspci(
         file: OptionalPath = None,
         verbose: bool = False,
         kernel_drivers: bool = False,
+        bridge_paths: bool = False,
         hide_single_domain: bool = True,
         id_resolve_option: IDResolveOption = IDResolveOption.Both,
         ) -> str:
@@ -65,6 +66,7 @@ def lspci(
        This radically changes the output format.
     :param bool kernel_drivers: Also include kernel modules and drivers
        in the output. Only has effect with the verbose output.
+    :param bool bridge_paths: Add PCI bridge paths to slot numbers.
     :param bool hide_single_domain: If there is a single PCI domain on this
        machine and it is numbered ``0000``, hide it from the slot numbers.
     :param id_resolve_option: Device, vendor or class ID outputting mode.
@@ -80,6 +82,8 @@ def lspci(
         args.append('-vvv')
     if kernel_drivers:
         args.append('-k')
+    if bridge_paths:
+        args.append('-PP')
     if not hide_single_domain:
         args.append('-D')
     if access_method:
