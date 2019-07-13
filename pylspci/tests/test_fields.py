@@ -34,6 +34,28 @@ class TestSlot(TestCase):
             '0013:37:42.6',
         )
 
+    def test_parent(self) -> None:
+        s = Slot('abcd:13:37.2/cafe:c0:ff.e/66:66.6')
+        self.assertEqual(str(s), 'abcd:13:37.2/cafe:c0:ff.e/cafe:66:66.6')
+        self.assertEqual(
+            repr(s),
+            "Slot('abcd:13:37.2/cafe:c0:ff.e/cafe:66:66.6')",
+        )
+        self.assertEqual(s.domain, 0xcafe)
+        self.assertEqual(s.bus, 0x66)
+        self.assertEqual(s.device, 0x66)
+        self.assertEqual(s.function, 0x6)
+        self.assertIsInstance(s.parent, Slot)
+        self.assertEqual(s.parent.domain, 0xcafe)
+        self.assertEqual(s.parent.bus, 0xc0)
+        self.assertEqual(s.parent.device, 0xff)
+        self.assertEqual(s.parent.function, 0xe)
+        self.assertIsInstance(s.parent.parent, Slot)
+        self.assertEqual(s.parent.parent.domain, 0xabcd)
+        self.assertEqual(s.parent.parent.bus, 0x13)
+        self.assertEqual(s.parent.parent.device, 0x37)
+        self.assertEqual(s.parent.parent.function, 0x2)
+
 
 class TestNameWithID(TestCase):
 

@@ -116,6 +116,16 @@ class TestCommand(TestCase):
         ))
 
     @patch('pylspci.command.subprocess.check_output')
+    def test_bridge_paths(self, cmd_mock: MagicMock) -> None:
+        cmd_mock.return_value = 'something'
+        self.assertEqual(lspci(bridge_paths=True), 'something')
+        self.assertEqual(cmd_mock.call_count, 1)
+        self.assertEqual(cmd_mock.call_args, call(
+            ['lspci', '-mm', '-PP', '-nn'],
+            universal_newlines=True,
+        ))
+
+    @patch('pylspci.command.subprocess.check_output')
     def test_hide_single_domain(self, cmd_mock: MagicMock) -> None:
         cmd_mock.return_value = 'something'
         self.assertEqual(lspci(hide_single_domain=False), 'something')
@@ -165,6 +175,7 @@ class TestCommand(TestCase):
             file='/file',
             verbose=True,
             kernel_drivers=True,
+            bridge_paths=True,
             hide_single_domain=False,
             id_resolve_option=IDResolveOption.IDOnly,
         ), 'something')
@@ -175,6 +186,7 @@ class TestCommand(TestCase):
              '-mm',
              '-vvv',
              '-k',
+             '-PP',
              '-D',
              '-Asomemethod',
              '-n',
