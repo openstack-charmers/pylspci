@@ -55,7 +55,6 @@ class TestVerboseParser(TestCase):
     def test_parse_list(self) -> None:
         devices: List[Device] = self.parser.parse([SAMPLE_DEVICE, ])
         self.assertEqual(len(devices), 1)
-        print(devices)
         self._check_device(devices[0])
 
     @patch('pylspci.parsers.base.lspci')

@@ -31,7 +31,7 @@ class Slot(object):
 
     device: int
     """
-    The slot's device, as a two-digit hexadecimal number.
+    The slot's device, as a two-digit hexadecimal number, up to `0x1f`.
 
     :type: int
     """
@@ -59,6 +59,11 @@ class Slot(object):
         if len(data) == 3:
             data.insert(0, self.parent.domain if self.parent else 0)
         self.domain, self.bus, self.device, self.function = data
+
+        if self.device > 0x1f:
+            raise ValueError('Device numbers cannot be above 0x1f')
+        if self.function > 0x7:
+            raise ValueError('Function numbers cannot be above 7')
 
     def __str__(self) -> str:
         output: str = '{:04x}:{:02x}:{:02x}.{:01x}'.format(
