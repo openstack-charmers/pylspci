@@ -161,6 +161,32 @@ class TestCommand(TestCase):
             universal_newlines=True,
         ))
 
+    @patch('pylspci.command.subprocess.check_output')
+    def test_slot_filter(self, cmd_mock: MagicMock) -> None:
+        cmd_mock.return_value = 'something'
+        self.assertEqual(
+            lspci(slot_filter='13'),
+            'something',
+        )
+        self.assertEqual(cmd_mock.call_count, 1)
+        self.assertEqual(cmd_mock.call_args, call(
+            ['lspci', '-mm', '-s', '*:*:13.*', '-nn'],
+            universal_newlines=True,
+        ))
+
+    @patch('pylspci.command.subprocess.check_output')
+    def test_device_filter(self, cmd_mock: MagicMock) -> None:
+        cmd_mock.return_value = 'something'
+        self.assertEqual(
+            lspci(device_filter=':13'),
+            'something',
+        )
+        self.assertEqual(cmd_mock.call_count, 1)
+        self.assertEqual(cmd_mock.call_args, call(
+            ['lspci', '-mm', '-d', '*:13:*', '-nn'],
+            universal_newlines=True,
+        ))
+
     @patch('pylspci.command.Path.is_file')
     @patch('pylspci.command.subprocess.check_output')
     def test_everything(self, cmd_mock: MagicMock, is_file_mock: MagicMock):
@@ -178,6 +204,8 @@ class TestCommand(TestCase):
             bridge_paths=True,
             hide_single_domain=False,
             id_resolve_option=IDResolveOption.IDOnly,
+            slot_filter='c0fe:e:e',
+            device_filter='c0fe::eeee',
         ), 'something')
 
         self.assertEqual(cmd_mock.call_count, 1)
@@ -189,6 +217,10 @@ class TestCommand(TestCase):
              '-PP',
              '-D',
              '-Asomemethod',
+             '-s',
+             'c0fe:e:e.*',
+             '-d',
+             'c0fe:*:eeee',
              '-n',
              '-i', '/pciids',
              '-p', '/pcimap',
