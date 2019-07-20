@@ -2,6 +2,7 @@ from enum import Enum
 from typing import Optional, Union, List, Mapping, Any
 from pathlib import Path
 from pylspci.fields import PCIAccessParameter
+from pylspci.filters import SlotFilter, DeviceFilter
 import subprocess
 
 OptionalPath = Optional[Union[str, Path]]
@@ -40,6 +41,8 @@ def lspci(
         bridge_paths: bool = False,
         hide_single_domain: bool = True,
         id_resolve_option: IDResolveOption = IDResolveOption.Both,
+        slot_filter: Optional[Union[SlotFilter, str]] = None,
+        device_filter: Optional[Union[DeviceFilter, str]] = None,
         ) -> str:
     """
     Call the ``lspci`` command with various parameters.
@@ -72,6 +75,11 @@ def lspci(
     :param id_resolve_option: Device, vendor or class ID outputting mode.
        See the :class:`IDResolveOption` docs for more details.
     :type id_resolve_option: IDResolveOption
+    :param slot_filter: Filter devices by their slot
+      (domain, bus, device, function)
+    :type slot_filter: SlotFilter or str or None
+    :param device_filter: Filter devices by their vendor, device or class ID
+    :type device_filter: DeviceFilter or str or None
     :return: Any output from the ``lspci`` command.
     :rtype: str
     :raises subprocess.CalledProcessError:
@@ -88,6 +96,16 @@ def lspci(
         args.append('-D')
     if access_method:
         args.append('-A{}'.format(access_method))
+    if slot_filter:
+        if isinstance(slot_filter, str):
+            slot_filter = SlotFilter.parse(slot_filter)
+        args.append('-s')
+        args.append(str(slot_filter))
+    if device_filter:
+        if isinstance(device_filter, str):
+            device_filter = DeviceFilter.parse(device_filter)
+        args.append('-d')
+        args.append(str(device_filter))
     if id_resolve_option != IDResolveOption.NameOnly:
         args.append(id_resolve_option.value)
 

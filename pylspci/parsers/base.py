@@ -31,10 +31,10 @@ class Parser(ABC):
         Run the lspci command with the given arguments, defaulting to the
         parser's default arguments, and parse the result.
 
-        :param **kwargs: Optional arguments to override the parser's default
+        :param \\**kwargs: Optional arguments to override the parser's default
            arguments. See :func:`lspci`'s documentation for a list of
            available arguments.
-        :type **kwargs: Mapping[str, Any]
+        :type \\**kwargs: Mapping[str, Any]
         :returns: A list of parsed devices.
         :rtype: List[Device]
         """
