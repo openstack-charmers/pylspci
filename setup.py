@@ -46,6 +46,7 @@ setup(
         "Topic :: Software Development :: Libraries",
         "Topic :: System :: Hardware",
         "Topic :: Utilities",
+        "Typing :: Typed",
     ],
     project_urls={
         "Source Code": "https://gitlab.com/Lucidiot/pylspci",
