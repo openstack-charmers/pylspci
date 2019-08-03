@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Union, List, Mapping, Any
+from typing import Union, Iterable, List, Mapping, Any
 from pylspci.device import Device
 from pylspci.command import lspci
 
@@ -15,13 +15,13 @@ class Parser(ABC):
     """
 
     @abstractmethod
-    def parse(self, data: Union[str, List[str]]) -> List[Device]:
+    def parse(self, data: Union[str, Iterable[str]]) -> List[Device]:
         """
         Parse a string or list of strings as a list of devices.
 
         :param data: A string holding multiple devices
            or a list of strings, one for each device.
-        :type data: str or List[str]
+        :type data: str or Iterable[str]
         :returns: A list of parsed devices.
         :rtype: List[Device]
         """
