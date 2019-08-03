@@ -1,4 +1,4 @@
-from typing import Union, List, NamedTuple, Callable, Any
+from typing import Union, List, Iterable, NamedTuple, Callable, Any
 from pylspci.parsers.base import Parser
 from pylspci.device import Device
 from pylspci.fields import hexstring, Slot, NameWithID
@@ -67,7 +67,7 @@ class VerboseParser(Parser):
         ),
     }
 
-    def _parse_device(self, device_data: Union[str, List[str]]) -> Device:
+    def _parse_device(self, device_data: Union[str, Iterable[str]]) -> Device:
         devdict = {}
         if isinstance(device_data, str):
             device_data = device_data.splitlines()
@@ -85,7 +85,7 @@ class VerboseParser(Parser):
 
         return Device(**devdict)
 
-    def parse(self, data: Union[str, List[str]]) -> List[Device]:
+    def parse(self, data: Union[str, Iterable[str]]) -> List[Device]:
         """
         Parse an lspci -vvvmm[nnk] output, either as a single string holding
         multiple devices separated by two newlines,
@@ -93,7 +93,7 @@ class VerboseParser(Parser):
 
         :param data: One string holding a full lspci output,
            or multiple strings holding one device each.
-        :type data: str or List[str]
+        :type data: str or Iterable[str]
         :return: A list of parsed devices.
         :rtype: List[Device]
         """

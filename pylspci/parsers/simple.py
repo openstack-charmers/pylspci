@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, Iterable
 from cached_property import cached_property
 from pylspci.parsers.base import Parser
 from pylspci.fields import hexstring, Slot, NameWithID
@@ -53,13 +53,13 @@ class SimpleParser(Parser):
         )
         return p
 
-    def parse(self, data: Union[str, List[str]]) -> List[Device]:
+    def parse(self, data: Union[str, Iterable[str]]) -> List[Device]:
         """
         Parse a multiline string or a list of single-line strings
         from lspci -mm into devices.
 
         :param data: String or list of strings to parse from.
-        :type data: str or List[str]
+        :type data: str or Iterable[str]
         :return: A list of parsed devices.
         :rtype: List[Device]
         """
@@ -67,13 +67,13 @@ class SimpleParser(Parser):
             data = data.splitlines()
         return list(map(self.parse_line, data))
 
-    def parse_line(self, args: Union[str, List[str]]) -> Device:
+    def parse_line(self, args: Union[str, Iterable[str]]) -> Device:
         """
         Parse a single line from lspci -mm into a single device, either
         as the line or as a list of fields.
 
         :param args: Line or list of fields to parse from.
-        :type args: str or List[str]
+        :type args: str or Iterable[str]
         :return: A single parsed device.
         :rtype: Device
         """
