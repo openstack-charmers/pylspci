@@ -17,6 +17,9 @@ setup(
     packages=find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"],
     ),
+    entry_points={
+        'console_scripts': ['pylspci=pylspci.__main__:main'],
+    },
     package_data={
         '': ['*.md', 'LICENSE', 'README'],
     },

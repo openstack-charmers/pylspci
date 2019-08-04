@@ -87,7 +87,7 @@ class SlotFilter(Filter):
 
     def __str__(self) -> str:
         return '{}:{}:{}.{}'.format(*map(
-            lambda x: '{:x}'.format(x) if x is not None else '*',
+            lambda x: '{:x}'.format(x) if x is not None else '',
             (self.domain, self.bus, self.device, self.function),
         ))
 
@@ -148,7 +148,7 @@ class DeviceFilter(Filter):
 
     def __str__(self) -> str:
         return ':'.join(map(
-            lambda x: '{:x}'.format(x) if x is not None else '*',
+            lambda x: '{:x}'.format(x) if x is not None else '',
             (self.vendor, self.device, self.cls),
         ))
 

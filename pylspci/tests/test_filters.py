@@ -16,8 +16,8 @@ class TestSlotFilter(TestCase):
         )
 
     def test_str(self):
-        self.assertEqual(str(SlotFilter()), '*:*:*.*')
-        self.assertEqual(str(SlotFilter(domain=0xcafe)), 'cafe:*:*.*')
+        self.assertEqual(str(SlotFilter()), '::.')
+        self.assertEqual(str(SlotFilter(domain=0xcafe)), 'cafe::.')
         self.assertEqual(
             str(SlotFilter(domain=0xc0ff, bus=0xe, device=0xe, function=7)),
             'c0ff:e:e.7',
@@ -54,8 +54,8 @@ class TestDeviceFilter(TestCase):
         )
 
     def test_str(self):
-        self.assertEqual(str(DeviceFilter()), '*:*:*')
-        self.assertEqual(str(DeviceFilter(vendor=0xcafe)), 'cafe:*:*')
+        self.assertEqual(str(DeviceFilter()), '::')
+        self.assertEqual(str(DeviceFilter(vendor=0xcafe)), 'cafe::')
         self.assertEqual(
             str(DeviceFilter(vendor=0xc0ff, device=0xe, cls=0xe)),
             'c0ff:e:e',

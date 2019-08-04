@@ -170,7 +170,7 @@ class TestCommand(TestCase):
         )
         self.assertEqual(cmd_mock.call_count, 1)
         self.assertEqual(cmd_mock.call_args, call(
-            ['lspci', '-mm', '-s', '*:*:13.*', '-nn'],
+            ['lspci', '-mm', '-s', '::13.', '-nn'],
             universal_newlines=True,
         ))
 
@@ -183,7 +183,7 @@ class TestCommand(TestCase):
         )
         self.assertEqual(cmd_mock.call_count, 1)
         self.assertEqual(cmd_mock.call_args, call(
-            ['lspci', '-mm', '-d', '*:13:*', '-nn'],
+            ['lspci', '-mm', '-d', ':13:', '-nn'],
             universal_newlines=True,
         ))
 
@@ -218,9 +218,9 @@ class TestCommand(TestCase):
              '-D',
              '-Asomemethod',
              '-s',
-             'c0fe:e:e.*',
+             'c0fe:e:e.',
              '-d',
-             'c0fe:*:eeee',
+             'c0fe::eeee',
              '-n',
              '-i', '/pciids',
              '-p', '/pcimap',
