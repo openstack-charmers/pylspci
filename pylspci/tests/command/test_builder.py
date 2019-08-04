@@ -14,6 +14,18 @@ class TestCommandBuilder(TestCase):
         self.assertEqual(lspci_mock.call_count, 1)
         self.assertEqual(lspci_mock.call_args, call())
 
+    @patch('pylspci.command.lspci')
+    def test_iter_str(self, lspci_mock):
+        """
+        Test iterating the CommandBuilder when lspci returns a single string
+        returns an iterator for a list made of a single string, not an iterator
+        for each character of the string
+        """
+        lspci_mock.return_value = 'a\nb'
+        self.assertListEqual(list(CommandBuilder()), ['a\nb', ])
+        self.assertEqual(lspci_mock.call_count, 1)
+        self.assertEqual(lspci_mock.call_args, call())
+
     @patch('pylspci.command.Path.is_file')
     @patch('pylspci.command.lspci')
     def test_use_pciids(self, lspci_mock, isfile_mock):

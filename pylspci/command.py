@@ -209,15 +209,22 @@ class CommandBuilder(object):
         self._params = kwargs
 
     def __iter__(self) -> Iterator[Union[str, Device, PCIAccessParameter]]:
+        result = None
         if self._list_access_methods:
-            return iter(list_access_methods())
+            result = list_access_methods()
         elif self._list_pcilib_params:
             if self._list_pcilib_params_raw:
-                return iter(list_pcilib_params_raw())
-            return iter(list_pcilib_params())
+                result = list_pcilib_params_raw()
+            else:
+                result = list_pcilib_params()
         elif self._parser:
-            return iter(self._parser.parse(lspci(**self._params)))
-        return iter(lspci(**self._params))
+            result = self._parser.parse(lspci(**self._params))
+        else:
+            result = lspci(**self._params)
+
+        if isinstance(result, str):
+            return iter([result, ])
+        return iter(result)
 
     def use_pciids(self,
                    path: OptionalPath,

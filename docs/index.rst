@@ -34,22 +34,35 @@ A Python parser for the ``lspci`` command from the pciutils_ package.
 
 .. _pciutils: http://mj.ucw.cz/sw/pciutils/
 
-Basic usage
------------
+Command-line interface
+----------------------
+
+An executable script named ``pylspci`` is available, and acts as a wrapper
+around ``lspci`` that can produce JSON output. ::
+
+   $ pylspci -nn
+   [{
+     "slot": {"domain": 0, "bus": 0, "device": 1, "function": 3},
+     "device": {"id": 9248, "name": "Name A"},
+     ...
+   }]
+
+See ``pylspci --help`` and the `CLI docs <cli>`_ to learn more.
+
+Parsing in Python
+-----------------
 
 To parse ``lspci -nnmm``, use the
 :class:`SimpleParser <pylspci.parsers.simple.SimpleParser>`.
 To parse ``lspci -nnmmvvvk``, use the
 :class:`VerboseParser <pylspci.parsers.verbose.VerboseParser>`.
-A :class:`SimpleParser <pylspci.parsers.simple.SimpleParser>` instance is
-available directly as ``pylspci.parser``.
 
 .. code:: python
 
-   >>> from pylspci import parser
-   >>> parser.run()
-   [Device(slot=Slot('0000:00:01.c'), name=NameWithID('Name A [2420]'), ...),
-    Device(slot=Slot('0000:00:01.d'), name=NameWithID('Name B [0e54]'), ...)]
+   >>> from pylspci.parsers import SimpleParser
+   >>> SimpleParser.run()
+   [Device(slot=Slot('0000:00:01.3'), name=NameWithID('Name A [2420]'), ...),
+    Device(slot=Slot('0000:00:01.4'), name=NameWithID('Name B [0e54]'), ...)]
 
 Custom arguments
 ^^^^^^^^^^^^^^^^
@@ -62,13 +75,14 @@ Custom arguments
    ...     hide_single_domain=False,
    ...     id_resolve_option=IDResolveOption.NameOnly,
    ... )
-   [Device(slot=Slot('0000:00:01.c'), name=NameWithID('Name A'), ...),
-    Device(slot=Slot('0000:00:01.d'), name=NameWithID('Name B'), ...)]
+   [Device(slot=Slot('0000:00:01.3'), name=NameWithID('Name A'), ...),
+    Device(slot=Slot('0000:00:01.4'), name=NameWithID('Name B'), ...)]
 
 Learn more
 ----------
 
 .. toctree::
+   cli
    data
    command
    low
