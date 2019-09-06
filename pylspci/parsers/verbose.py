@@ -1,4 +1,4 @@
-from typing import Union, List, Iterable, NamedTuple, Callable, Any
+from typing import Union, List, Dict, Iterable, NamedTuple, Callable, Any
 from pylspci.parsers.base import Parser
 from pylspci.device import Device
 from pylspci.fields import hexstring, Slot, NameWithID
@@ -68,7 +68,7 @@ class VerboseParser(Parser):
     }
 
     def _parse_device(self, device_data: Union[str, Iterable[str]]) -> Device:
-        devdict = {}
+        devdict: Dict[str, Any] = {}
         if isinstance(device_data, str):
             device_data = device_data.splitlines()
 
@@ -85,21 +85,30 @@ class VerboseParser(Parser):
 
         return Device(**devdict)
 
-    def parse(self, data: Union[str, Iterable[str]]) -> List[Device]:
+    def parse(
+            self,
+            data: Union[str, Iterable[str], Iterable[Iterable[str]]],
+            ) -> List[Device]:
         """
         Parse an lspci -vvvmm[nnk] output, either as a single string holding
         multiple devices separated by two newlines,
         or as a list of multiline strings holding one device each.
 
-        :param data: One string holding a full lspci output,
-           or multiple strings holding one device each.
-        :type data: str or Iterable[str]
+        :param data: A string holding multiple devices,
+           a list of strings, one for each device,
+           or a list of lists of strings, one list for each device, with
+           each list holding each part of the device output.
+        :type data: str or Iterable[str] or Iterable[Iterable[str]]
         :return: A list of parsed devices.
         :rtype: List[Device]
         """
         if isinstance(data, str):
             data = data.split('\n\n')
-        return list(map(
-            self._parse_device,
-            filter(bool, map(str.strip, data)),  # Ignore empty strings
-        ))
+        result: List[Device] = []
+        for line in data:
+            if isinstance(line, str):
+                line = str.strip(line)
+            if not line:  # Ignore empty strings and lists
+                continue
+            result.append(self._parse_device(line))
+        return result

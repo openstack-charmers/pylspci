@@ -1,7 +1,9 @@
-from abc import ABC
-from typing import Optional, Pattern, ClassVar
+from abc import ABC, abstractmethod
+from typing import Optional, Pattern, ClassVar, Dict, Type, TypeVar, Any
 from pylspci.fields import hexstring
 import re
+
+T = TypeVar('T', bound='Filter')
 
 
 class Filter(ABC):
@@ -9,10 +11,11 @@ class Filter(ABC):
     _REGEX: ClassVar[Pattern]
 
     @classmethod
-    def parse(cls, value: str) -> 'Filter':
+    def parse(cls: Type[T], value: str) -> T:
         if not value:
             return cls()
-        match, data = cls._REGEX.match(value), {}
+        match = cls._REGEX.match(value)
+        data: Dict[str, str] = {}
         if match:
             data = {k: v for k, v in match.groupdict().items()
                     if v is not None}
@@ -23,6 +26,10 @@ class Filter(ABC):
             for k, v in data.items()
             if v != '' and v != '*'
         })
+
+    @abstractmethod
+    def __init__(self, **kwargs: Any) -> None:
+        "Create a filter."
 
 
 class SlotFilter(Filter):
@@ -92,9 +99,10 @@ class SlotFilter(Filter):
         ))
 
     def __eq__(self, other: object) -> bool:
-        return isinstance(other, self.__class__) and \
-            self.domain, self.bus, self.device, self.function == \
-            other.domain, other.bus, other.device, other.function
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        return (self.domain, self.bus, self.device, self.function) == \
+            (other.domain, other.bus, other.device, other.function)
 
 
 class DeviceFilter(Filter):
@@ -153,6 +161,7 @@ class DeviceFilter(Filter):
         ))
 
     def __eq__(self, other: object) -> bool:
-        return isinstance(other, self.__class__) and \
-            self.vendor, self.device, self.cls == \
-            other.vendor, other.device, other.cls
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        return (self.vendor, self.device, self.cls) == \
+            (other.vendor, other.device, other.cls)

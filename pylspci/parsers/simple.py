@@ -53,13 +53,19 @@ class SimpleParser(Parser):
         )
         return p
 
-    def parse(self, data: Union[str, Iterable[str]]) -> List[Device]:
+    def parse(
+            self,
+            data: Union[str, Iterable[str], Iterable[Iterable[str]]],
+            ) -> List[Device]:
         """
         Parse a multiline string or a list of single-line strings
         from lspci -mm into devices.
 
-        :param data: String or list of strings to parse from.
-        :type data: str or Iterable[str]
+        :param data: A string holding multiple devices,
+           a list of strings, one for each device,
+           or a list of lists of strings, one list for each device, with
+           each list holding each part of the device output.
+        :type data: str or Iterable[str] or Iterable[Iterable[str]]
         :return: A list of parsed devices.
         :rtype: List[Device]
         """

@@ -1,9 +1,11 @@
 from enum import Enum
-from typing import Optional, Union, Tuple, List, Mapping, Any, Iterator
+from typing import \
+    Optional, Union, List, Mapping, MutableMapping, Any, Iterator
 from pathlib import Path
 from pylspci.device import Device
 from pylspci.fields import PCIAccessParameter
 from pylspci.filters import SlotFilter, DeviceFilter
+from pylspci.parsers.base import Parser
 import subprocess
 
 OptionalPath = Optional[Union[str, Path]]
@@ -140,7 +142,7 @@ def lspci(
     )
 
 
-def list_access_methods():
+def list_access_methods() -> List[str]:
     """
     Calls ``lspci(access_method='help')`` to list the PCI access methods
     the underlying ``pcilib`` provides and parses the human-readable list into
@@ -157,7 +159,7 @@ def list_access_methods():
     ))
 
 
-def list_pcilib_params_raw():
+def list_pcilib_params_raw() -> List[str]:
     """
     Calls ``lspci -Ohelp`` to list the PCI access parameters the underlying
     ``pcilib`` provides.
@@ -176,7 +178,7 @@ def list_pcilib_params_raw():
     ))
 
 
-def list_pcilib_params():
+def list_pcilib_params() -> List[PCIAccessParameter]:
     """
     Calls ``lspci -Ohelp`` to list the PCI access parameters the underlying
     ``pcilib`` provides and parse the human-readable list into
@@ -202,14 +204,14 @@ class CommandBuilder(object):
     _list_access_methods: bool = False
     _list_pcilib_params: bool = False
     _list_pcilib_params_raw: bool = False
-    _params: Mapping[str, Any] = {}
-    _parser = None
+    _params: MutableMapping[str, Any] = {}
+    _parser: Optional[Parser] = None
 
     def __init__(self, **kwargs: Mapping[str, Any]):
         self._params = kwargs
 
     def __iter__(self) -> Iterator[Union[str, Device, PCIAccessParameter]]:
-        result = None
+        result: Union[str, List[str], List[Device], List[PCIAccessParameter]]
         if self._list_access_methods:
             result = list_access_methods()
         elif self._list_pcilib_params:
@@ -317,7 +319,9 @@ class CommandBuilder(object):
             self._list_access_methods = False
         return self
 
-    def with_pcilib_params(self, *args, **kwargs) -> 'CommandBuilder':
+    def with_pcilib_params(self,
+                           *args: Mapping[str, Any],
+                           **kwargs: Any) -> 'CommandBuilder':
         """
         Override some pcilib parameters. When given a dict, will rewrite the
         parameters with the new dict. When given keyword arguments, will update
@@ -448,7 +452,7 @@ class CommandBuilder(object):
         return self
 
     def slot_filter(self,
-                    *args: Tuple[str],
+                    *args: str,
                     domain: Optional[int] = None,
                     bus: Optional[int] = None,
                     device: Optional[int] = None,
@@ -478,7 +482,7 @@ class CommandBuilder(object):
         return self
 
     def device_filter(self,
-                      *args: Tuple[str],
+                      *args: str,
                       cls: Optional[int] = None,
                       vendor: Optional[int] = None,
                       device: Optional[int] = None) -> 'CommandBuilder':
@@ -502,7 +506,7 @@ class CommandBuilder(object):
                 DeviceFilter(cls=cls, vendor=vendor, device=device)
         return self
 
-    def with_parser(self, parser=None) -> 'CommandBuilder':
+    def with_parser(self, parser: Optional[Parser] = None) -> 'CommandBuilder':
         """
         Use a pylspci parser to get parsed Device instances instead of strings.
 

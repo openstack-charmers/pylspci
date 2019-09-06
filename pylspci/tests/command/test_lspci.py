@@ -18,7 +18,9 @@ class TestCommand(TestCase):
 
     @patch('pylspci.command.Path.is_file')
     @patch('pylspci.command.subprocess.check_output')
-    def test_pciids(self, cmd_mock: MagicMock, is_file_mock: MagicMock):
+    def test_pciids(self,
+                    cmd_mock: MagicMock,
+                    is_file_mock: MagicMock) -> None:
         cmd_mock.return_value = 'something'
         is_file_mock.return_value = True
         self.assertEqual(lspci(pciids='/somewhere'), 'something')
@@ -30,7 +32,7 @@ class TestCommand(TestCase):
         self.assertEqual(is_file_mock.call_count, 1)
 
     @patch('pylspci.command.Path.is_file')
-    def test_pciids_missing(self, is_file_mock: MagicMock):
+    def test_pciids_missing(self, is_file_mock: MagicMock) -> None:
         is_file_mock.return_value = False
         with self.assertRaises(AssertionError):
             lspci(pciids='/nowhere')
@@ -38,7 +40,9 @@ class TestCommand(TestCase):
 
     @patch('pylspci.command.Path.is_file')
     @patch('pylspci.command.subprocess.check_output')
-    def test_pcimap(self, cmd_mock: MagicMock, is_file_mock: MagicMock):
+    def test_pcimap(self,
+                    cmd_mock: MagicMock,
+                    is_file_mock: MagicMock) -> None:
         cmd_mock.return_value = 'something'
         is_file_mock.return_value = True
         self.assertEqual(lspci(pcimap='/somewhere'), 'something')
@@ -50,7 +54,7 @@ class TestCommand(TestCase):
         self.assertEqual(is_file_mock.call_count, 1)
 
     @patch('pylspci.command.Path.is_file')
-    def test_pcimap_missing(self, is_file_mock: MagicMock):
+    def test_pcimap_missing(self, is_file_mock: MagicMock) -> None:
         is_file_mock.return_value = False
         with self.assertRaises(AssertionError):
             lspci(pcimap='/nowhere')
@@ -77,7 +81,7 @@ class TestCommand(TestCase):
 
     @patch('pylspci.command.Path.is_file')
     @patch('pylspci.command.subprocess.check_output')
-    def test_file(self, cmd_mock: MagicMock, is_file_mock: MagicMock):
+    def test_file(self, cmd_mock: MagicMock, is_file_mock: MagicMock) -> None:
         cmd_mock.return_value = 'something'
         is_file_mock.return_value = True
         self.assertEqual(lspci(file='/somewhere'), 'something')
@@ -89,7 +93,7 @@ class TestCommand(TestCase):
         self.assertEqual(is_file_mock.call_count, 1)
 
     @patch('pylspci.command.Path.is_file')
-    def test_file_missing(self, is_file_mock: MagicMock):
+    def test_file_missing(self, is_file_mock: MagicMock) -> None:
         is_file_mock.return_value = False
         with self.assertRaises(AssertionError):
             lspci(file='/nowhere')
@@ -189,7 +193,9 @@ class TestCommand(TestCase):
 
     @patch('pylspci.command.Path.is_file')
     @patch('pylspci.command.subprocess.check_output')
-    def test_everything(self, cmd_mock: MagicMock, is_file_mock: MagicMock):
+    def test_everything(self,
+                        cmd_mock: MagicMock,
+                        is_file_mock: MagicMock) -> None:
         cmd_mock.return_value = 'something'
         is_file_mock.return_value = True
 

@@ -7,6 +7,8 @@ from pylspci.parsers import SimpleParser
 
 class TestSimpleParser(TestCase):
 
+    parser: SimpleParser
+
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
@@ -24,8 +26,10 @@ class TestSimpleParser(TestCase):
         self.assertEqual(dev.vendor.name, 'Intel Corporation')
         self.assertEqual(dev.device.id, 0x244e)
         self.assertEqual(dev.device.name, '82801 PCI Bridge')
+        assert dev.subsystem_vendor is not None
         self.assertEqual(dev.subsystem_vendor.id, 0x8086)
         self.assertEqual(dev.subsystem_vendor.name, 'Intel Corporation')
+        assert dev.subsystem_device is not None
         self.assertEqual(dev.subsystem_device.id, 0x244e)
         self.assertEqual(dev.subsystem_device.name, '82801 PCI Bridge')
         self.assertEqual(dev.revision, 0xd5)
@@ -71,14 +75,16 @@ class TestSimpleParser(TestCase):
         self.assertEqual(dev.vendor.name, '')
         self.assertIsNone(dev.device.id)
         self.assertEqual(dev.device.name, '')
+        assert dev.subsystem_vendor is not None
         self.assertIsNone(dev.subsystem_vendor.id)
         self.assertEqual(dev.subsystem_vendor.name, '')
+        assert dev.subsystem_device is not None
         self.assertIsNone(dev.subsystem_device.id)
         self.assertEqual(dev.subsystem_device.name, '')
         self.assertIsNone(dev.revision)
         self.assertIsNone(dev.progif)
 
-    @patch('pylspci.parsers.base.lspci')
+    @patch('pylspci.command.lspci')
     def test_command(self, cmd_mock: MagicMock) -> None:
         cmd_mock.return_value = \
             '00:1c.3 "PCI bridge [0604]" "Intel Corporation [8086]" ' \
