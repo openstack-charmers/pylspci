@@ -30,6 +30,11 @@ flake8:
   script:
     - flake8
 
+mypy:
+  stage: test
+  script:
+    - mypy .
+
 doc8:
   stage: test
   script:

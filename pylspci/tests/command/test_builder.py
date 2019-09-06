@@ -8,14 +8,14 @@ from pylspci.parsers import SimpleParser, VerboseParser
 class TestCommandBuilder(TestCase):
 
     @patch('pylspci.command.lspci')
-    def test_default(self, lspci_mock):
+    def test_default(self, lspci_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         self.assertListEqual(list(CommandBuilder()), ['a', 'b'])
         self.assertEqual(lspci_mock.call_count, 1)
         self.assertEqual(lspci_mock.call_args, call())
 
     @patch('pylspci.command.lspci')
-    def test_iter_str(self, lspci_mock):
+    def test_iter_str(self, lspci_mock: MagicMock) -> None:
         """
         Test iterating the CommandBuilder when lspci returns a single string
         returns an iterator for a list made of a single string, not an iterator
@@ -28,7 +28,9 @@ class TestCommandBuilder(TestCase):
 
     @patch('pylspci.command.Path.is_file')
     @patch('pylspci.command.lspci')
-    def test_use_pciids(self, lspci_mock, isfile_mock):
+    def test_use_pciids(self,
+                        lspci_mock: MagicMock,
+                        isfile_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         isfile_mock.return_value = True
         builder = CommandBuilder().use_pciids('somefile')
@@ -39,7 +41,9 @@ class TestCommandBuilder(TestCase):
 
     @patch('pylspci.command.Path.is_file')
     @patch('pylspci.command.lspci')
-    def test_use_pciids_check(self, lspci_mock, isfile_mock):
+    def test_use_pciids_check(self,
+                              lspci_mock: MagicMock,
+                              isfile_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         isfile_mock.return_value = False
         with self.assertRaisesRegex(AssertionError, 'not found'):
@@ -48,7 +52,9 @@ class TestCommandBuilder(TestCase):
 
     @patch('pylspci.command.Path.is_file')
     @patch('pylspci.command.lspci')
-    def test_use_pciids_no_check(self, lspci_mock, isfile_mock):
+    def test_use_pciids_no_check(self,
+                                 lspci_mock: MagicMock,
+                                 isfile_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         isfile_mock.return_value = False
         builder = CommandBuilder().use_pciids('somefile', check=False)
@@ -59,7 +65,9 @@ class TestCommandBuilder(TestCase):
 
     @patch('pylspci.command.Path.is_file')
     @patch('pylspci.command.lspci')
-    def test_use_pcimap(self, lspci_mock, isfile_mock):
+    def test_use_pcimap(self,
+                        lspci_mock: MagicMock,
+                        isfile_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         isfile_mock.return_value = True
         builder = CommandBuilder().use_pcimap('somefile')
@@ -70,7 +78,9 @@ class TestCommandBuilder(TestCase):
 
     @patch('pylspci.command.Path.is_file')
     @patch('pylspci.command.lspci')
-    def test_use_pcimap_check(self, lspci_mock, isfile_mock):
+    def test_use_pcimap_check(self,
+                              lspci_mock: MagicMock,
+                              isfile_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         isfile_mock.return_value = False
         with self.assertRaisesRegex(AssertionError, 'not found'):
@@ -79,7 +89,9 @@ class TestCommandBuilder(TestCase):
 
     @patch('pylspci.command.Path.is_file')
     @patch('pylspci.command.lspci')
-    def test_use_pcimap_no_check(self, lspci_mock, isfile_mock):
+    def test_use_pcimap_no_check(self,
+                                 lspci_mock: MagicMock,
+                                 isfile_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         isfile_mock.return_value = False
         builder = CommandBuilder().use_pcimap('somefile', check=False)
@@ -89,7 +101,7 @@ class TestCommandBuilder(TestCase):
         self.assertFalse(isfile_mock.called)
 
     @patch('pylspci.command.lspci')
-    def test_use_access_method(self, lspci_mock):
+    def test_use_access_method(self, lspci_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         builder = CommandBuilder() \
             .use_access_method('one') \
@@ -99,7 +111,7 @@ class TestCommandBuilder(TestCase):
         self.assertEqual(lspci_mock.call_args, call(access_method='two'))
 
     @patch('pylspci.command.list_access_methods')
-    def test_list_access_methods(self, list_mock):
+    def test_list_access_methods(self, list_mock: MagicMock) -> None:
         list_mock.return_value = ['a', 'b']
         builder = CommandBuilder().list_pcilib_params().list_access_methods()
         self.assertListEqual(list(builder), ['a', 'b'])
@@ -107,7 +119,7 @@ class TestCommandBuilder(TestCase):
         self.assertEqual(list_mock.call_args, call())
 
     @patch('pylspci.command.list_pcilib_params')
-    def test_list_pcilib_params(self, list_mock):
+    def test_list_pcilib_params(self, list_mock: MagicMock) -> None:
         list_mock.return_value = ['a', 'b']
         builder = CommandBuilder().list_access_methods().list_pcilib_params()
         self.assertListEqual(list(builder), ['a', 'b'])
@@ -115,7 +127,7 @@ class TestCommandBuilder(TestCase):
         self.assertEqual(list_mock.call_args, call())
 
     @patch('pylspci.command.list_pcilib_params_raw')
-    def test_list_pcilib_params_raw(self, list_mock):
+    def test_list_pcilib_params_raw(self, list_mock: MagicMock) -> None:
         list_mock.return_value = ['a', 'b']
         builder = CommandBuilder() \
             .list_access_methods() \
@@ -125,7 +137,7 @@ class TestCommandBuilder(TestCase):
         self.assertEqual(list_mock.call_args, call())
 
     @patch('pylspci.command.lspci')
-    def test_with_pcilib_params_dict(self, lspci_mock):
+    def test_with_pcilib_params_dict(self, lspci_mock: MagicMock) -> None:
         with self.assertRaisesRegex(AssertionError, 'dict or keyword'):
             CommandBuilder().with_pcilib_params({'a': 'b'}, c='d')
         with self.assertRaisesRegex(AssertionError, 'Only one positional'):
@@ -138,7 +150,7 @@ class TestCommandBuilder(TestCase):
         self.assertEqual(lspci_mock.call_args, call(pcilib_params={'a': 'b'}))
 
     @patch('pylspci.command.lspci')
-    def test_with_pcilib_params_kwargs(self, lspci_mock):
+    def test_with_pcilib_params_kwargs(self, lspci_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         builder = CommandBuilder() \
             .with_pcilib_params(a='1', b='2') \
@@ -151,7 +163,9 @@ class TestCommandBuilder(TestCase):
 
     @patch('pylspci.command.Path.is_file')
     @patch('pylspci.command.lspci')
-    def test_from_file(self, lspci_mock, isfile_mock):
+    def test_from_file(self,
+                       lspci_mock: MagicMock,
+                       isfile_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         isfile_mock.return_value = True
         builder = CommandBuilder().from_file('somefile')
@@ -162,7 +176,9 @@ class TestCommandBuilder(TestCase):
 
     @patch('pylspci.command.Path.is_file')
     @patch('pylspci.command.lspci')
-    def test_from_file_check(self, lspci_mock, isfile_mock):
+    def test_from_file_check(self,
+                             lspci_mock: MagicMock,
+                             isfile_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         isfile_mock.return_value = False
         with self.assertRaisesRegex(AssertionError, 'not found'):
@@ -171,7 +187,9 @@ class TestCommandBuilder(TestCase):
 
     @patch('pylspci.command.Path.is_file')
     @patch('pylspci.command.lspci')
-    def test_from_file_no_check(self, lspci_mock, isfile_mock):
+    def test_from_file_no_check(self,
+                                lspci_mock: MagicMock,
+                                isfile_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         isfile_mock.return_value = False
         builder = CommandBuilder().from_file('somefile', check=False)
@@ -181,7 +199,7 @@ class TestCommandBuilder(TestCase):
         self.assertFalse(isfile_mock.called)
 
     @patch('pylspci.command.lspci')
-    def test_verbose(self, lspci_mock):
+    def test_verbose(self, lspci_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         builder = CommandBuilder().verbose()
         self.assertListEqual(list(builder), ['a', 'b'])
@@ -189,7 +207,7 @@ class TestCommandBuilder(TestCase):
         self.assertEqual(lspci_mock.call_args, call(verbose=True))
 
     @patch('pylspci.command.lspci')
-    def test_include_kernel_drivers(self, lspci_mock):
+    def test_include_kernel_drivers(self, lspci_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         builder = CommandBuilder() \
             .include_kernel_drivers(False) \
@@ -202,7 +220,7 @@ class TestCommandBuilder(TestCase):
         ))
 
     @patch('pylspci.command.lspci')
-    def test_include_bridge_paths(self, lspci_mock):
+    def test_include_bridge_paths(self, lspci_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         builder = CommandBuilder() \
             .include_bridge_paths(False) \
@@ -214,7 +232,7 @@ class TestCommandBuilder(TestCase):
         ))
 
     @patch('pylspci.command.lspci')
-    def test_hide_single_domain(self, lspci_mock):
+    def test_hide_single_domain(self, lspci_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         builder = CommandBuilder().hide_single_domain()
         self.assertListEqual(list(builder), ['a', 'b'])
@@ -222,7 +240,7 @@ class TestCommandBuilder(TestCase):
         self.assertEqual(lspci_mock.call_args, call(hide_single_domain=True))
 
     @patch('pylspci.command.lspci')
-    def test_with_ids(self, lspci_mock):
+    def test_with_ids(self, lspci_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         builder = CommandBuilder().with_ids(False)
         self.assertListEqual(list(builder), ['a', 'b'])
@@ -240,7 +258,7 @@ class TestCommandBuilder(TestCase):
         ))
 
     @patch('pylspci.command.lspci')
-    def test_with_names(self, lspci_mock):
+    def test_with_names(self, lspci_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         builder = CommandBuilder().with_names(False)
         self.assertListEqual(list(builder), ['a', 'b'])
@@ -259,11 +277,13 @@ class TestCommandBuilder(TestCase):
 
     @patch('pylspci.command.SlotFilter')
     @patch('pylspci.command.lspci')
-    def test_slot_filter_str(self, lspci_mock, filter_mock):
+    def test_slot_filter_str(self,
+                             lspci_mock: MagicMock,
+                             filter_mock: MagicMock) -> None:
         with self.assertRaisesRegex(AssertionError, 'Only one positional'):
             CommandBuilder().slot_filter('something', 'something else')
         with self.assertRaisesRegex(AssertionError, 'Use either'):
-            CommandBuilder().slot_filter('something', domain='a')
+            CommandBuilder().slot_filter('something', domain=0xa)
 
         filter_mock.parse.return_value = 'lefilter'
         lspci_mock.return_value = ['a', 'b']
@@ -276,33 +296,37 @@ class TestCommandBuilder(TestCase):
 
     @patch('pylspci.command.SlotFilter')
     @patch('pylspci.command.lspci')
-    def test_slot_filter_kwargs(self, lspci_mock, filter_mock):
+    def test_slot_filter_kwargs(self,
+                                lspci_mock: MagicMock,
+                                filter_mock: MagicMock) -> None:
         filter_mock.return_value = 'lefilter'
         lspci_mock.return_value = ['a', 'b']
         builder = CommandBuilder().slot_filter(
-            domain='a',
-            bus='b',
-            device='c',
-            function='d',
+            domain=0xa,
+            bus=0xb,
+            device=0xc,
+            function=0xd,
         )
         self.assertListEqual(list(builder), ['a', 'b'])
         self.assertEqual(lspci_mock.call_count, 1)
         self.assertEqual(lspci_mock.call_args, call(slot_filter='lefilter'))
         self.assertEqual(filter_mock.call_count, 1)
         self.assertEqual(filter_mock.call_args, call(
-            domain='a',
-            bus='b',
-            device='c',
-            function='d',
+            domain=0xa,
+            bus=0xb,
+            device=0xc,
+            function=0xd,
         ))
 
     @patch('pylspci.command.DeviceFilter')
     @patch('pylspci.command.lspci')
-    def test_device_filter_str(self, lspci_mock, filter_mock):
+    def test_device_filter_str(self,
+                               lspci_mock: MagicMock,
+                               filter_mock: MagicMock) -> None:
         with self.assertRaisesRegex(AssertionError, 'Only one positional'):
             CommandBuilder().device_filter('something', 'something else')
         with self.assertRaisesRegex(AssertionError, 'Use either'):
-            CommandBuilder().device_filter('something', vendor='b')
+            CommandBuilder().device_filter('something', vendor=0xb)
 
         filter_mock.parse.return_value = 'lefilter'
         lspci_mock.return_value = ['a', 'b']
@@ -315,25 +339,27 @@ class TestCommandBuilder(TestCase):
 
     @patch('pylspci.command.DeviceFilter')
     @patch('pylspci.command.lspci')
-    def test_device_filter_kwargs(self, lspci_mock, filter_mock):
+    def test_device_filter_kwargs(self,
+                                  lspci_mock: MagicMock,
+                                  filter_mock: MagicMock) -> None:
         filter_mock.return_value = 'lefilter'
         lspci_mock.return_value = ['a', 'b']
         builder = CommandBuilder().device_filter(
-            cls='a',
-            vendor='b',
-            device='c',
+            cls=0xa,
+            vendor=0xb,
+            device=0xc,
         )
         self.assertListEqual(list(builder), ['a', 'b'])
         self.assertEqual(lspci_mock.call_count, 1)
         self.assertEqual(lspci_mock.call_args, call(device_filter='lefilter'))
         self.assertEqual(filter_mock.call_count, 1)
         self.assertEqual(filter_mock.call_args, call(
-            cls='a',
-            vendor='b',
-            device='c',
+            cls=0xa,
+            vendor=0xb,
+            device=0xc,
         ))
 
-    def test_with_default_parser(self):
+    def test_with_default_parser(self) -> None:
         builder = CommandBuilder()
         self.assertIsNone(builder._parser)
 
@@ -344,7 +370,7 @@ class TestCommandBuilder(TestCase):
         self.assertIsInstance(builder._parser, VerboseParser)
 
     @patch('pylspci.command.lspci')
-    def test_with_parser(self, lspci_mock):
+    def test_with_parser(self, lspci_mock: MagicMock) -> None:
         lspci_mock.return_value = ['a', 'b']
         parser_mock = MagicMock(spec=SimpleParser)
         parser_mock.parse.return_value = ('parsed_a', 'parsed_b')

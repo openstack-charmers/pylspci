@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
-from typing import Optional, List
+from typing import Optional, Dict, Any
 from pylspci.command import CommandBuilder, IDResolveOption
 from pylspci.filters import SlotFilter, DeviceFilter
 import argparse
@@ -156,15 +156,15 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main() -> None:
     parser: argparse.ArgumentParser = get_parser()
-    args: dict = vars(parser.parse_args())
+    args: Dict[str, Any] = vars(parser.parse_args())
 
     # Specific parsing required
     use_parser: bool = args.pop('json', True)
     kernel_modules: bool = args.pop('kernel_modules', False)
     access_method: Optional[str] = args.pop('access_method', None)
-    pcilib_params: List[str] = args.pop('pcilib_params', []) or []
+    pcilib_params = args.pop('pcilib_params', []) or []
 
     builder: CommandBuilder = CommandBuilder(**args)
     if kernel_modules:
@@ -195,7 +195,7 @@ def main():
             print(item)
         return
 
-    def _item_handler(item):
+    def _item_handler(item: Any) -> Any:
         if hasattr(item, '_asdict'):
             return item._asdict()
         return item

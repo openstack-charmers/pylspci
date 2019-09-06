@@ -4,7 +4,7 @@ from pylspci.filters import SlotFilter, DeviceFilter
 
 class TestSlotFilter(TestCase):
 
-    def test_empty(self):
+    def test_empty(self) -> None:
         f = SlotFilter()
         self.assertIsNone(f.domain)
         self.assertIsNone(f.bus)
@@ -15,7 +15,7 @@ class TestSlotFilter(TestCase):
             'SlotFilter(domain=None, bus=None, device=None, function=None)',
         )
 
-    def test_str(self):
+    def test_str(self) -> None:
         self.assertEqual(str(SlotFilter()), '::.')
         self.assertEqual(str(SlotFilter(domain=0xcafe)), 'cafe::.')
         self.assertEqual(
@@ -23,7 +23,7 @@ class TestSlotFilter(TestCase):
             'c0ff:e:e.7',
         )
 
-    def test_parse(self):
+    def test_parse(self) -> None:
         self.assertEqual(SlotFilter.parse(''), SlotFilter())
         self.assertEqual(SlotFilter.parse('::.'), SlotFilter())
         self.assertEqual(SlotFilter.parse('*:*:*.*'), SlotFilter())
@@ -40,10 +40,24 @@ class TestSlotFilter(TestCase):
         with self.assertRaises(ValueError):
             SlotFilter.parse('g')
 
+    def test_eq(self) -> None:
+        self.assertEqual(
+            SlotFilter(domain=0xc0ff, bus=0xe, device=0xe, function=7),
+            SlotFilter(domain=0xc0ff, bus=0xe, device=0xe, function=7),
+        )
+        self.assertNotEqual(
+            SlotFilter(domain=0xc0ff, bus=0xf, device=0xe, function=7),
+            SlotFilter(domain=0xc0ff, bus=0xe, device=0xe, function=7),
+        )
+        self.assertNotEqual(
+            SlotFilter(domain=0xc0ff, bus=0xf, device=0xe, function=7),
+            'not a filter',
+        )
+
 
 class TestDeviceFilter(TestCase):
 
-    def test_empty(self):
+    def test_empty(self) -> None:
         f = DeviceFilter()
         self.assertIsNone(f.vendor)
         self.assertIsNone(f.device)
@@ -53,7 +67,7 @@ class TestDeviceFilter(TestCase):
             'DeviceFilter(cls=None, vendor=None, device=None)',
         )
 
-    def test_str(self):
+    def test_str(self) -> None:
         self.assertEqual(str(DeviceFilter()), '::')
         self.assertEqual(str(DeviceFilter(vendor=0xcafe)), 'cafe::')
         self.assertEqual(
@@ -61,7 +75,7 @@ class TestDeviceFilter(TestCase):
             'c0ff:e:e',
         )
 
-    def test_parse(self):
+    def test_parse(self) -> None:
         self.assertEqual(DeviceFilter.parse(''), DeviceFilter())
         self.assertEqual(DeviceFilter.parse('::'), DeviceFilter())
         self.assertEqual(DeviceFilter.parse('*:*:*'), DeviceFilter())
@@ -78,3 +92,17 @@ class TestDeviceFilter(TestCase):
             DeviceFilter.parse('4')
         with self.assertRaises(ValueError):
             DeviceFilter.parse('g')
+
+    def test_eq(self) -> None:
+        self.assertEqual(
+            DeviceFilter(vendor=0xc0ff, device=0xe, cls=0xe),
+            DeviceFilter(vendor=0xc0ff, device=0xe, cls=0xe),
+        )
+        self.assertNotEqual(
+            DeviceFilter(vendor=0xc0ff, device=0xf, cls=0xe),
+            DeviceFilter(vendor=0xc0ff, device=0xe, cls=0xe),
+        )
+        self.assertNotEqual(
+            DeviceFilter(vendor=0xc0ff, device=0xe, cls=0xe),
+            'not a filter',
+        )

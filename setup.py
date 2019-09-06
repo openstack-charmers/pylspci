@@ -21,7 +21,8 @@ setup(
         'console_scripts': ['pylspci=pylspci.__main__:main'],
     },
     package_data={
-        '': ['*.md', 'LICENSE', 'README'],
+        '': ['VERSION', 'LICENSE', 'README.rst'],
+        'pylspci': ['py.typed'],
     },
     python_requires='>=3.5',
     install_requires=requirements,

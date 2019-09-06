@@ -60,11 +60,13 @@ class TestSlot(TestCase):
         self.assertEqual(s.device, 0x06)
         self.assertEqual(s.function, 0x6)
         self.assertIsInstance(s.parent, Slot)
+        assert s.parent is not None  # Required for type checks
         self.assertEqual(s.parent.domain, 0xcafe)
         self.assertEqual(s.parent.bus, 0xc0)
         self.assertEqual(s.parent.device, 0x0f)
         self.assertEqual(s.parent.function, 0x3)
         self.assertIsInstance(s.parent.parent, Slot)
+        assert s.parent.parent is not None  # Required for type checks
         self.assertEqual(s.parent.parent.domain, 0xabcd)
         self.assertEqual(s.parent.parent.bus, 0x13)
         self.assertEqual(s.parent.parent.device, 0x07)
