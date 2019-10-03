@@ -31,6 +31,37 @@ This will clone the repository, create a virtual environment named
 ``pylspci``, then tell pip to let the package be editable (``-e``).
 The ``[dev]`` suffix adds the extra requirements useful for development.
 
+Unit tests
+^^^^^^^^^^
+
+Unit tests use the standard ``unittest`` package; you may run them using the
+standard ``setup.py`` command::
+
+   ./setup.py test
+
+Tests coverage
+^^^^^^^^^^^^^^
+
+I aim for 100% coverage on all of my Python packages whenever I add unit
+tests to them; this package is no exception. CI checks use the `coverage`_
+Python package and `codecov`_ to check for test coverage. To get test coverage
+data locally, run::
+
+   coverage run setup.py test
+
+You may then get a short coverage summary in your terminal::
+
+   coverage report
+
+Or generate an HTML report in a ``htmlcov`` folder, which can be browsed
+offline using your favorite web browser and shows line by line coverage::
+
+   coverage html
+
+If you are having issues reaching 100% coverage, try to still add some tests,
+and mention your issues when creating a pull request to the
+`GitLab repository`_.
+
 Linting
 ^^^^^^^
 
@@ -49,6 +80,8 @@ They are also subject to linting using the ``doc8`` tool.
 
 .. _submit an issue: https://gitlab.com/Lucidiot/pylspci/issues/new
 .. _virtualenvwrapper: https://virtualenvwrapper.readthedocs.io
+.. _coverage: https://coverage.readthedocs.io/
+.. _codecov: https://codecov.io/gl/Lucidiot/pylspci
 .. _GitLab repository: https://gitlab.com/Lucidiot/pylspci
 .. _Sphinx: http://www.sphinx-doc.org/
 .. _reStructuredText: http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
