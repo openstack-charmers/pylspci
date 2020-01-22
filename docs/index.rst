@@ -21,13 +21,16 @@ Python lspci parser
 .. image:: https://gitlab.com/Lucidiot/pylspci/badges/master/pipeline.svg
    :target: https://gitlab.com/Lucidiot/pylspci/pipelines
 
+.. image:: https://codecov.io/gl/Lucidiot/pylspci/branch/master/graph/badge.svg
+   :target: https://codecov.io/gl/Lucidiot/pylspci
+
 .. image:: https://requires.io/github/Lucidiot/pylspci/requirements.svg?branch=master
    :target: https://requires.io/github/Lucidiot/pylspci/requirements/?branch=master
 
 .. image:: https://img.shields.io/github/last-commit/Lucidiot/pylspci.svg
    :target: https://gitlab.com/Lucidiot/pylspci/commits
 
-.. image:: https://img.shields.io/badge/badge%20count-9-brightgreen.svg
+.. image:: https://img.shields.io/badge/badge%20count-10-brightgreen.svg
    :target: https://gitlab.com/Lucidiot/pylspci
 
 A Python parser for the ``lspci`` command from the pciutils_ package.
