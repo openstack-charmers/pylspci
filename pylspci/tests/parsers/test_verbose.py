@@ -16,6 +16,7 @@ ProgIf:	01
 Driver:	pcieport
 Module:	nouveau
 Module:	nvidia
+NUMANode:	0
 """
 
 
@@ -50,6 +51,7 @@ class TestVerboseParser(TestCase):
         self.assertEqual(dev.progif, 0x01)
         self.assertEqual(dev.driver, 'pcieport')
         self.assertListEqual(dev.kernel_modules, ['nouveau', 'nvidia'])
+        self.assertEqual(dev.numa_node, 0)
 
     def test_parse_str(self) -> None:
         devices: List[Device] = self.parser.parse(SAMPLE_DEVICE)

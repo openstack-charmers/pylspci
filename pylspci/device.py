@@ -76,3 +76,10 @@ class Device(NamedTuple):
 
     :type: List[str] or None
     """
+
+    numa_node: Optional[int] = None
+    """
+    NUMA Node this device is connected to (Linux only).
+
+    :type: int or None
+    """
