@@ -2,6 +2,13 @@ from typing import Union, List, Dict, Iterable, NamedTuple, Callable, Any
 from pylspci.parsers.base import Parser
 from pylspci.device import Device
 from pylspci.fields import hexstring, Slot, NameWithID
+import warnings
+
+UNKNOWN_FIELD_WARNING = (
+    'Unsupported device field {!r} with value {!r}\n'
+    'Please report this, along with the output of `lspci -mmnnvvvk`, at '
+    'https://gitlab.com/Lucidiot/pylspci/issues'
+)
 
 
 class FieldMapping(NamedTuple):
@@ -75,8 +82,12 @@ class VerboseParser(Parser):
 
         for line in device_data:
             key, _, value = map(str.strip, line.partition(':'))
-            assert key in self._field_mapping, \
-                'Unsupported key {!r}'.format(key)
+            if key not in self._field_mapping:
+                warnings.warn(
+                    UNKNOWN_FIELD_WARNING.format(key, value),
+                    UserWarning,
+                )
+                continue
             field = self._field_mapping[key]
             if field.many:
                 devdict.setdefault(field.field_name, []) \

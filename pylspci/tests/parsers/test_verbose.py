@@ -75,3 +75,16 @@ class TestVerboseParser(TestCase):
         self.assertEqual(cmd_mock.call_count, 1)
         self.assertEqual(cmd_mock.call_args,
                          call(verbose=True, kernel_drivers=True))
+
+    def test_unknown_field(self) -> None:
+        with self.assertWarns(
+            UserWarning,
+            msg="Unsupported device field 'NewField' with value 'Value'\n"
+                "Please report this, along with the output of"
+                "`lspci -mmnnvvvk`, at "
+                "https://gitlab.com/Lucidiot/pylspci/issues"):
+            devices: List[Device] = \
+                self.parser.parse(SAMPLE_DEVICE + 'NewField\tValue')
+
+        self.assertEqual(len(devices), 1)
+        self._check_device(devices[0])
