@@ -73,6 +73,7 @@ class VerboseParser(Parser):
             many=True,
         ),
         'NUMANode': FieldMapping(field_name='numa_node', field_type=int),
+        'PhySlot': FieldMapping(field_name='physical_slot', field_type=int),
     }
 
     def _parse_device(self, device_data: Union[str, Iterable[str]]) -> Device:
