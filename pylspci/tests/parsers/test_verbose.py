@@ -17,6 +17,7 @@ Driver:	pcieport
 Module:	nouveau
 Module:	nvidia
 NUMANode:	0
+IOMMUGroup:	1
 PhySlot:	4
 """
 
@@ -53,6 +54,7 @@ class TestVerboseParser(TestCase):
         self.assertEqual(dev.driver, 'pcieport')
         self.assertListEqual(dev.kernel_modules, ['nouveau', 'nvidia'])
         self.assertEqual(dev.numa_node, 0)
+        self.assertEqual(dev.iommu_group, 1)
         self.assertEqual(dev.physical_slot, 4)
 
     def test_parse_str(self) -> None:

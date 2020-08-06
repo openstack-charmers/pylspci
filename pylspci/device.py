@@ -84,6 +84,13 @@ class Device(NamedTuple):
     :type: int or None
     """
 
+    iommu_group: Optional[int] = None
+    """
+    IOMMU group that this device is part of (optional, Linux only).
+
+    :type: int or None
+    """
+
     physical_slot: Optional[int] = None
     """
     The device's physical slot number (Linux only).

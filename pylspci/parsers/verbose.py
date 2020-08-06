@@ -73,6 +73,7 @@ class VerboseParser(Parser):
             many=True,
         ),
         'NUMANode': FieldMapping(field_name='numa_node', field_type=int),
+        'IOMMUGroup': FieldMapping(field_name='iommu_group', field_type=int),
         'PhySlot': FieldMapping(field_name='physical_slot', field_type=int),
     }
 
