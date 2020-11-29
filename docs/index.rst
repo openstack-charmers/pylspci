@@ -57,7 +57,7 @@ To parse ``lspci -nnmmvvvk``, use the
 .. code:: python
 
    >>> from pylspci.parsers import SimpleParser
-   >>> SimpleParser.run()
+   >>> SimpleParser().run()
    [Device(slot=Slot('0000:00:01.3'), name=NameWithID('Name A [2420]'), ...),
     Device(slot=Slot('0000:00:01.4'), name=NameWithID('Name B [0e54]'), ...)]
 
@@ -67,8 +67,8 @@ Custom arguments
 .. code:: python
 
    >>> from pylspci.command import IDResolveOption
-   >>> from pylspci import parser
-   >>> parser.run(
+   >>> from pylspci.parsers import VerboseParser
+   >>> VerboseParser().run(
    ...     hide_single_domain=False,
    ...     id_resolve_option=IDResolveOption.NameOnly,
    ... )
