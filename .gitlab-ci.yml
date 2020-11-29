@@ -25,20 +25,10 @@ tests:
     - coverage report
     - codecov
 
-flake8:
+pre-commit:
   stage: test
   script:
-    - flake8
-
-mypy:
-  stage: test
-  script:
-    - mypy .
-
-doc8:
-  stage: test
-  script:
-    - doc8
+    - pre-commit run -a
 
 deploy-pypi:
   stage: deploy

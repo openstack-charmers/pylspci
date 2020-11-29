@@ -130,4 +130,3 @@ PCI access
 ``-H2``
   Access hardware using Intel configuration mechanism 2.
   Alias to ``-A intel-conf2``.
-
