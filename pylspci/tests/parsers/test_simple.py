@@ -1,6 +1,7 @@
-from unittest import TestCase
-from unittest.mock import patch, call, MagicMock
 from typing import List
+from unittest import TestCase
+from unittest.mock import MagicMock, call, patch
+
 from pylspci.device import Device
 from pylspci.parsers import SimpleParser
 

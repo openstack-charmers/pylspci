@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Union, Iterable, List, Dict, Any
+from typing import Any, Dict, Iterable, List, Union
+
 from pylspci.device import Device
 
 

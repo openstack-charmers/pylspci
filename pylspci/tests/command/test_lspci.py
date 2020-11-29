@@ -1,8 +1,10 @@
 from unittest import TestCase
-from unittest.mock import patch, call, MagicMock
+from unittest.mock import MagicMock, call, patch
+
+from pylspci.command import (
+    IDResolveOption, list_access_methods, list_pcilib_params, lspci
+)
 from pylspci.fields import PCIAccessParameter
-from pylspci.command import \
-    lspci, list_access_methods, list_pcilib_params, IDResolveOption
 
 
 class TestCommand(TestCase):

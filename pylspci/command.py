@@ -1,12 +1,14 @@
+import subprocess
 from enum import Enum
-from typing import \
-    Optional, Union, List, Mapping, MutableMapping, Any, Iterator
 from pathlib import Path
+from typing import (
+    Any, Iterator, List, Mapping, MutableMapping, Optional, Union
+)
+
 from pylspci.device import Device
 from pylspci.fields import PCIAccessParameter
-from pylspci.filters import SlotFilter, DeviceFilter
+from pylspci.filters import DeviceFilter, SlotFilter
 from pylspci.parsers.base import Parser
-import subprocess
 
 OptionalPath = Optional[Union[str, Path]]
 

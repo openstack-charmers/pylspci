@@ -1,7 +1,6 @@
-from functools import partial
-from typing import Optional, Any
 import re
-
+from functools import partial
+from typing import Any, Optional
 
 hexstring = partial(int, base=16)
 

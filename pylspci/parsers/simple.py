@@ -1,10 +1,12 @@
-from typing import Union, List, Iterable
-from cached_property import cached_property
-from pylspci.parsers.base import Parser
-from pylspci.fields import hexstring, Slot, NameWithID
-from pylspci.device import Device
 import argparse
 import shlex
+from typing import Iterable, List, Union
+
+from cached_property import cached_property
+
+from pylspci.device import Device
+from pylspci.fields import NameWithID, Slot, hexstring
+from pylspci.parsers.base import Parser
 
 
 class SimpleParser(Parser):

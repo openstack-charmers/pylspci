@@ -1,5 +1,6 @@
 from unittest import TestCase
-from pylspci.filters import SlotFilter, DeviceFilter
+
+from pylspci.filters import DeviceFilter, SlotFilter
 
 
 class TestSlotFilter(TestCase):

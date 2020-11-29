@@ -1,5 +1,6 @@
-from typing import NamedTuple, Optional, List
-from pylspci.fields import Slot, NameWithID
+from typing import List, NamedTuple, Optional
+
+from pylspci.fields import NameWithID, Slot
 
 
 class Device(NamedTuple):

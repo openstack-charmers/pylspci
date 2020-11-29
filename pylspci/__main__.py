@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-from pathlib import Path
-from typing import Optional, Dict, Any
-from pylspci.command import CommandBuilder, IDResolveOption
-from pylspci.filters import SlotFilter, DeviceFilter
 import argparse
 import json
+from pathlib import Path
+from typing import Any, Dict, Optional
+
+from pylspci.command import CommandBuilder, IDResolveOption
+from pylspci.filters import DeviceFilter, SlotFilter
 
 
 def get_parser() -> argparse.ArgumentParser:

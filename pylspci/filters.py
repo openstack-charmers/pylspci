@@ -1,7 +1,8 @@
-from abc import ABC, abstractmethod
-from typing import Optional, Pattern, ClassVar, Dict, Type, TypeVar, Any
-from pylspci.fields import hexstring
 import re
+from abc import ABC, abstractmethod
+from typing import Any, ClassVar, Dict, Optional, Pattern, Type, TypeVar
+
+from pylspci.fields import hexstring
 
 T = TypeVar('T', bound='Filter')
 

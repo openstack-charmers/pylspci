@@ -1,6 +1,7 @@
-from unittest import TestCase
-from unittest.mock import patch, call, MagicMock
 from pathlib import Path
+from unittest import TestCase
+from unittest.mock import MagicMock, call, patch
+
 from pylspci.command import CommandBuilder, IDResolveOption
 from pylspci.parsers import SimpleParser, VerboseParser
 

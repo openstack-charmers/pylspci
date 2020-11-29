@@ -1,5 +1,6 @@
 from unittest import TestCase
-from pylspci.fields import Slot, NameWithID, PCIAccessParameter
+
+from pylspci.fields import NameWithID, PCIAccessParameter, Slot
 
 
 class TestSlot(TestCase):

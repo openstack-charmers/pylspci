@@ -1,8 +1,9 @@
-from typing import Union, List, Dict, Iterable, NamedTuple, Callable, Any
-from pylspci.parsers.base import Parser
-from pylspci.device import Device
-from pylspci.fields import hexstring, Slot, NameWithID
 import warnings
+from typing import Any, Callable, Dict, Iterable, List, NamedTuple, Union
+
+from pylspci.device import Device
+from pylspci.fields import NameWithID, Slot, hexstring
+from pylspci.parsers.base import Parser
 
 UNKNOWN_FIELD_WARNING = (
     'Unsupported device field {!r} with value {!r}\n'
