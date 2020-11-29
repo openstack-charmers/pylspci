@@ -99,3 +99,12 @@ class TestSimpleParser(TestCase):
 
         self.assertEqual(cmd_mock.call_count, 1)
         self.assertEqual(cmd_mock.call_args, call())
+
+    def test_verbose_error(self) -> None:
+        with self.assertRaises(ValueError) as ctx:
+            self.parser.run(verbose=True)
+        self.assertEqual(
+            ctx.exception.args[0],
+            'Verbose output is unsupported from the SimpleParser. '
+            'Please use the pylspci.parsers.VerboseParser instead.'
+        )

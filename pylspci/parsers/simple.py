@@ -1,6 +1,6 @@
 import argparse
 import shlex
-from typing import Iterable, List, Union
+from typing import Any, Iterable, List, Union
 
 from cached_property import cached_property
 
@@ -88,3 +88,11 @@ class SimpleParser(Parser):
         if isinstance(args, str):
             args = shlex.split(args)
         return Device(**vars(self._parser.parse_args(args)))
+
+    def run(self, **kwargs: Any) -> List[Device]:
+        if kwargs.get('verbose'):
+            raise ValueError(
+                'Verbose output is unsupported from the SimpleParser. '
+                'Please use the pylspci.parsers.VerboseParser instead.'
+            )
+        return super().run(**kwargs)
