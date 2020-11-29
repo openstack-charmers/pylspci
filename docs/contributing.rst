@@ -69,6 +69,13 @@ The source code follows the PEP 8 code style and performs CI checks using the
 ``flake8`` tool. To perform the same checks locally, run ``flake8`` on the root
 directory of this repository.
 
+Type checking
+^^^^^^^^^^^^^
+
+The source code uses PEP 484 type hints and type checking is performed in CI
+using ``mypy``. To run those checks locally, run ``mypy .`` on the root
+directory of this repository.
+
 Documentation
 -------------
 
