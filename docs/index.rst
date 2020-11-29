@@ -24,7 +24,7 @@ Python lspci parser
 .. image:: https://codecov.io/gl/Lucidiot/pylspci/branch/master/graph/badge.svg
    :target: https://codecov.io/gl/Lucidiot/pylspci
 
-.. image:: https://img.shields.io/badge/badge%20count-10-brightgreen.svg
+.. image:: https://img.shields.io/badge/badge%20count-8-brightgreen.svg
    :target: https://gitlab.com/Lucidiot/pylspci
 
 A Python parser for the ``lspci`` command from the pciutils_ package.
