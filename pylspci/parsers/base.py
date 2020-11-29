@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Union, Mapping, Iterable, List, Dict, Any
+from typing import Union, Iterable, List, Dict, Any
 from pylspci.device import Device
 
 
@@ -30,7 +30,7 @@ class Parser(ABC):
         :rtype: List[Device]
         """
 
-    def run(self, **kwargs: Mapping[str, Any]) -> List[Device]:
+    def run(self, **kwargs: Any) -> List[Device]:
         """
         Run the lspci command with the given arguments, defaulting to the
         parser's default arguments, and parse the result.
@@ -38,7 +38,7 @@ class Parser(ABC):
         :param \\**kwargs: Optional arguments to override the parser's default
            arguments. See :func:`lspci`'s documentation for a list of
            available arguments.
-        :type \\**kwargs: Mapping[str, Any]
+        :type \\**kwargs: Any
         :returns: A list of parsed devices.
         :rtype: List[Device]
         """

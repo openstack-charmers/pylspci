@@ -207,7 +207,7 @@ class CommandBuilder(object):
     _params: MutableMapping[str, Any] = {}
     _parser: Optional[Parser] = None
 
-    def __init__(self, **kwargs: Mapping[str, Any]):
+    def __init__(self, **kwargs: Any):
         self._params = kwargs
 
     def __iter__(self) -> Iterator[Union[str, Device, PCIAccessParameter]]:
