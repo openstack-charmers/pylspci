@@ -75,8 +75,11 @@ deploy-testpypi:
 pages:
   stage: deploy
   when: manual
+  needs:
+    - pre-commit
   only:
     - master@Lucidiot/pylspci
+
   artifacts:
     paths:
       - public
