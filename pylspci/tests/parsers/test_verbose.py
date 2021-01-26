@@ -56,7 +56,7 @@ class TestVerboseParser(TestCase):
         self.assertListEqual(dev.kernel_modules, ['nouveau', 'nvidia'])
         self.assertEqual(dev.numa_node, 0)
         self.assertEqual(dev.iommu_group, 1)
-        self.assertEqual(dev.physical_slot, 4)
+        self.assertEqual(dev.physical_slot, '4')
 
     def test_parse_str(self) -> None:
         devices: List[Device] = self.parser.parse(SAMPLE_DEVICE)
