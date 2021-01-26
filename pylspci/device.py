@@ -92,7 +92,7 @@ class Device(NamedTuple):
     :type: int or None
     """
 
-    physical_slot: Optional[int] = None
+    physical_slot: Optional[str] = None
     """
     The device's physical slot number (Linux only).
 
