@@ -96,5 +96,5 @@ class Device(NamedTuple):
     """
     The device's physical slot number (Linux only).
 
-    :type: int or None
+    :type: str or None
     """
