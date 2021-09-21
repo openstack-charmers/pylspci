@@ -43,29 +43,21 @@ class SlotFilter(Filter):
     domain: Optional[int] = None
     """
     Device domain, as a four-digit hexadecimal number.
-
-    :type: int or None
     """
 
     bus: Optional[int] = None
     """
     Device bus, as a two-digit hexadecimal number.
-
-    :type: int or None
     """
 
     device: Optional[int] = None
     """
     Device number, as a two-digit hexadecimal number, up to `0x1f`.
-
-    :type: int or None
     """
 
     function: Optional[int] = None
     """
     The slot's function, as a single octal digit.
-
-    :type: int or None
     """
 
     # [[domain:]bus:][device][.function]
@@ -116,22 +108,16 @@ class DeviceFilter(Filter):
     cls: Optional[int] = None
     """
     Device class ID, as a four-digit hexadecimal number.
-
-    :type: int or None
     """
 
     vendor: Optional[int] = None
     """
     Device vendor ID, as a four-digit hexadecimal number.
-
-    :type: int or None
     """
 
     device: Optional[int] = None
     """
     Device ID, as a four-digit hexadecimal number.
-
-    :type: int or None
     """
 
     # [vendor]:[device][:class]

@@ -21,23 +21,17 @@ class FieldMapping(NamedTuple):
     field_name: str
     """
     Field name on the :class:`Device` named tuple.
-
-    :type: str
     """
 
     field_type: Callable[[str], Any]
     """
     Field type; a callable to use to parse the string value.
-
-    :type: Callable[[str], Any]
     """
 
     many: bool = False
     """
     Whether or not to use a List, if this field can be repeated multiple times
     in the lspci output.
-
-    :type: bool
     """
 
 
