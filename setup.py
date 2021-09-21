@@ -30,7 +30,6 @@ setup(
     extras_require={
         'dev': dev_requirements,
     },
-    tests_require=dev_requirements,
     test_suite='pylspci.tests',
     license='GNU General Public License 3',
     description="Simple parser for lspci -mmnn.",
