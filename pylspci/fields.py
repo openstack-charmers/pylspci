@@ -22,36 +22,26 @@ class Slot(object):
     """
     The slot's domain, as a four-digit hexadecimal number.
     When omitted, defaults to ``0x0000``.
-
-    :type: int
     """
 
     bus: int
     """
     The slot's bus, as a two-digit hexadecimal number.
-
-    :type: int
     """
 
     device: int
     """
     The slot's device, as a two-digit hexadecimal number, up to `0x1f`.
-
-    :type: int
     """
 
     function: int
     """
     The slot's function, as a single octal digit.
-
-    :type: int
     """
 
     parent: Optional["Slot"] = None
     """
     The slot's parent bridge, if present.
-
-    :type: Slot or None
     """
 
     def __init__(self, value: str) -> None:
@@ -102,15 +92,11 @@ class NameWithID(object):
     id: Optional[int]
     """
     The PCI ID as a four-digit hexadecimal number.
-
-    :type: int or None
     """
 
     name: Optional[str]
     """
     The human-readable name associated with this ID.
-
-    :type: str or None
     """
 
     _NAME_ID_REGEX = re.compile(r'^(?P<name>.+)\s\[(?P<id>[0-9a-fA-F]{4})\]$')
@@ -168,22 +154,16 @@ class PCIAccessParameter(object):
     name: str
     """
     The parameter's name.
-
-    :type: str
     """
 
     description: str
     """
     A short description of the parameter's use.
-
-    :type: str
     """
 
     default: Optional[str]
     """
     An optional default value for the parameter.
-
-    :type: str or None
     """
 
     _PARAM_REGEX = re.compile(
