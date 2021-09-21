@@ -161,8 +161,7 @@ def main() -> None:
     parser: argparse.ArgumentParser = get_parser()
     args: Dict[str, Any] = vars(parser.parse_args())
 
-    # Specific parsing required
-    use_parser: bool = args.pop('json', True)
+    json_output: bool = args.pop('json', True)
     kernel_modules: bool = args.pop('kernel_modules', False)
     access_method: Optional[str] = args.pop('access_method', None)
     pcilib_params = args.pop('pcilib_params', []) or []
@@ -179,7 +178,7 @@ def main() -> None:
 
     for param in pcilib_params:
         if param.strip().lower() == 'help':
-            builder = builder.list_pcilib_params(raw=not use_parser)
+            builder = builder.list_pcilib_params(raw=not json_output)
             break
         if '=' not in param:
             parser.error(
@@ -187,24 +186,19 @@ def main() -> None:
         key, value = map(str.strip, param.split('=', 2))
         builder = builder.with_pcilib_params(**{key: value})
 
-    if use_parser:
+    if json_output:
         builder = builder.with_default_parser()
 
     result = list(builder)
-    if not use_parser:  # Raw mode
+    if not json_output:  # Raw mode
         for item in result:
             print(item)
         return
 
-    def _item_handler(item: Any) -> Any:
-        if hasattr(item, '_asdict'):
-            return item._asdict()
-        return item
-
-    print(json.dumps(
-        list(map(_item_handler, result)),
-        default=vars,
-    ))
+    print(json.dumps([
+        item if isinstance(item, str) else item.as_dict()
+        for item in result
+    ]))
 
 
 if __name__ == '__main__':
