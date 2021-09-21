@@ -1,6 +1,15 @@
-from typing import List, NamedTuple, Optional
+from typing import Dict, List, NamedTuple, Optional, Union
 
-from pylspci.fields import NameWithID, Slot
+from pylspci.fields import NameWithID, NameWithIDDict, Slot, SlotDict
+
+DeviceDict = Dict[str, Union[
+    int,
+    str,
+    SlotDict,
+    NameWithIDDict,
+    List[str],
+    None,
+]]
 
 
 class Device(NamedTuple):
@@ -98,3 +107,31 @@ class Device(NamedTuple):
 
     :type: str or None
     """
+
+    def as_dict(self) -> DeviceDict:
+        """
+        Serialize this device as a JSON-serializable `dict`.
+        """
+        return {
+            "slot": self.slot.as_dict(),
+            "cls": self.cls.as_dict(),
+            "vendor": self.vendor.as_dict(),
+            "device": self.device.as_dict(),
+            "subsystem_vendor": (
+                self.subsystem_vendor.as_dict()
+                if self.subsystem_vendor
+                else None
+            ),
+            "subsystem_device": (
+                self.subsystem_device.as_dict()
+                if self.subsystem_device
+                else None
+            ),
+            "revision": self.revision,
+            "progif": self.progif,
+            "driver": self.driver,
+            "kernel_modules": self.kernel_modules,
+            "numa_node": self.numa_node,
+            "iommu_group": self.iommu_group,
+            "physical_slot": self.physical_slot,
+        }

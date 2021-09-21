@@ -73,6 +73,16 @@ class TestSlot(TestCase):
         self.assertEqual(s.parent.parent.device, 0x07)
         self.assertEqual(s.parent.parent.function, 0x2)
 
+    def test_as_dict(self) -> None:
+        s = Slot('cafe:13:07.2')
+        self.assertDictEqual(s.as_dict(), {
+            "domain": 0xcafe,
+            "bus": 0x13,
+            "device": 0x07,
+            "function": 0x2,
+            "parent": None,
+        })
+
 
 class TestNameWithID(TestCase):
 
@@ -128,6 +138,13 @@ class TestNameWithID(TestCase):
         self.assertIsNone(n.id)
         self.assertEqual(n.name, 'Something [hexa]')
 
+    def test_as_dict(self) -> None:
+        n = NameWithID('Something [caf3]')
+        self.assertDictEqual(n.as_dict(), {
+            "id": 0xcaf3,
+            "name": "Something",
+        })
+
 
 class TestPCIAccessParameter(TestCase):
 
@@ -159,3 +176,11 @@ class TestPCIAccessParameter(TestCase):
         p2 = PCIAccessParameter('param.name  Some description ()')
         self.assertEqual(p1, p1)
         self.assertNotEqual(p1, p2)
+
+    def test_as_dict(self) -> None:
+        p = PCIAccessParameter('param.name  Some description (default value)')
+        self.assertDictEqual(p.as_dict(), {
+            "name": "param.name",
+            "description": "Some description",
+            "default": "default value",
+        })

@@ -1,6 +1,11 @@
 import re
 from functools import partial
-from typing import Any, Optional
+from typing import Any, Dict, Optional, Union
+
+# mypy does not support recursive type definitions
+# SlotDict = Dict[str, Union[int, 'SlotDict', None]]
+SlotDict = Dict[str, Union[int, Dict[str, Any], None]]
+NameWithIDDict = Dict[str, Union[int, str, None]]
 
 hexstring = partial(int, base=16)
 
@@ -75,6 +80,18 @@ class Slot(object):
     def __repr__(self) -> str:
         return '{}({!r})'.format(self.__class__.__name__, str(self))
 
+    def as_dict(self) -> SlotDict:
+        """
+        Serialize this slot as a JSON-serializable `dict`.
+        """
+        return {
+            "domain": self.domain,
+            "bus": self.bus,
+            "device": self.device,
+            "function": self.function,
+            "parent": self.parent.as_dict() if self.parent else None,
+        }
+
 
 class NameWithID(object):
     """
@@ -131,6 +148,15 @@ class NameWithID(object):
     def __repr__(self) -> str:
         return '{}({!r})'.format(self.__class__.__name__, str(self))
 
+    def as_dict(self) -> NameWithIDDict:
+        """
+        Serialize this name and ID as a JSON-serializable `dict`.
+        """
+        return {
+            "id": self.id,
+            "name": self.name,
+        }
+
 
 class PCIAccessParameter(object):
     """
@@ -183,3 +209,13 @@ class PCIAccessParameter(object):
         return isinstance(other, PCIAccessParameter) and \
             (self.name, self.description, self.default) \
             == (other.name, other.description, other.default)
+
+    def as_dict(self) -> Dict[str, Optional[str]]:
+        """
+        Serialize this PCI access parameter as a JSON-serializable `dict`.
+        """
+        return {
+            "name": self.name,
+            "description": self.description,
+            "default": self.default,
+        }
